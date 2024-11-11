@@ -20,9 +20,8 @@ Pääpiirteittäin toimii kuten moni muukin "bulletin board" -softa, eli tarjoll
 8. Ylläpitäjä voi merkitä minkä tahansa keskustelualueen "salaiseksi" ja määrittää kenellä on sinne pääsy
 
 ## Käyttö
-Oletuksena että asennettuna git, python3 jne.
+Oletuksena että asennettuna git, python3, PostgreSQL jne.
 
 1. Kloonaa repo
-2. Repossa on jo valmiina venv jossa Flask ja muut tarvittavat riippuvuudet
-3. Siirry virtual environmentiin ympäristösi (Linux/Windows) vaatimalla tavalla
-4. Aja Flask komennolla `flask run`
+2. Repossa tiedostossa `requirements.txt` listattu vaadittavat riippuvuudet jotka täytyy asentaa esim. komennolla `pip install -r requirements.txt`
+3. Aja Flask komennolla `flask run`
