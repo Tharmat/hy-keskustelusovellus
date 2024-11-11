@@ -1,5 +1,4 @@
 from flask import Flask, render_template
-from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
 from os import getenv
@@ -15,6 +14,9 @@ app.secret_key = getenv("SECRET_KEY")
 
 @app.route("/")
 def index():
+    return render_template("index.html", messages=fetch_motd(db)) 
+
+def fetch_motd(db):
     result = db.session.execute(text("SELECT content FROM messages"))
-    messages = result.fetchall()
-    return render_template("index.html", messages=messages) 
+    return result.fetchall()
+    
