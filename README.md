@@ -24,4 +24,5 @@ Oletuksena että asennettuna git, python3, PostgreSQL jne.
 
 1. Kloonaa repo
 2. Repossa tiedostossa `requirements.txt` listattu vaadittavat riippuvuudet jotka täytyy asentaa esim. komennolla `pip install -r requirements.txt`
-3. Aja Flask komennolla `flask run`
+3. Repon juuresta täytyy löytyä tiedosto `.secret_env` joka sisältää rivin `SECRET_KEY=xxx` jossa `xxx` on jokin satunnaisesti valittu avain
+4. Aja Flask komennolla `flask run`
