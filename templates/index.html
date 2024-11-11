@@ -1,3 +1,7 @@
 <title>Etusivu</title>
 <h1>Etusivu</h1>
-<b>Hello world!</b>
+{% for message in messages %}
+<b>
+{{ message.content }}
+</b>
+{% endfor %}
