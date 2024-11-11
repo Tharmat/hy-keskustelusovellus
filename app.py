@@ -12,5 +12,4 @@ db = SQLAlchemy(app)
 def index():
     result = db.session.execute(text("SELECT content FROM messages"))
     messages = result.fetchall()
-    print(messages)
     return render_template("index.html", messages=messages) 
