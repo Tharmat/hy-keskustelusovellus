@@ -18,3 +18,11 @@ Pääpiirteittäin toimii kuten moni muukin "bulletin board" -softa, eli tarjoll
 6. Käyttäjä voi myös etsiä olemassaolevista viesteistä ne joissa on annettu hakusana
 7. Ylläpitäjä voi edellisten lisäksi poistaa/lisätä keskustelualueita ja poistaa/muokata myös toisten käyttäjien viestejä/ketjuja
 8. Ylläpitäjä voi merkitä minkä tahansa keskustelualueen "salaiseksi" ja määrittää kenellä on sinne pääsy
+
+## Käyttö
+Oletuksena että asennettuna git, python3 jne.
+
+1. Kloonaa repo
+2. Repossa on jo valmiina venv jossa Flask ja muut tarvittavat riippuvuudet
+3. Siirry virtual environmentiin ympäristösi (Linux/Windows) vaatimalla tavalla
+4. Aja Flask komennolla `flask run`
