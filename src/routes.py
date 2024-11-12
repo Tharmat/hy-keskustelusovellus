@@ -1,6 +1,7 @@
 from werkzeug.security import check_password_hash
 from flask import render_template, request, session, redirect
 from app import app
+from src.decorators import login_required
 
 import src.db
 
@@ -9,6 +10,7 @@ def index():
     return render_template("index.html", messages=src.db.fetch_motd())
 
 @app.route("/main")
+@login_required
 def main():
     return render_template("main.html", topics= src.db.fetch_current_topics())
 
