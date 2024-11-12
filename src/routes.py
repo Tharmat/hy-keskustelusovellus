@@ -14,6 +14,7 @@ def main():
 
 @app.route("/login",methods=["POST"])
 def login():
+    # TODO: Handle loading login page when user is already logged in. Should redirect to the main page
     username = request.form["username"]
     password = request.form["password"]
 

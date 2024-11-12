@@ -1,15 +1,12 @@
 <title>Etusivu</title>
 <h1>Etusivu</h1>
+<p>Viesti sponsoreilta:
 {% for message in messages %}
 <b>
 {{ message.content }}
 </b>
 {% endfor %}
-
-{% if session.username %}
-<p>Olet kirjautunut nimellä {{ session.username }}</p>
-<a href="/logout">Kirjaudu ulos</a>
-{% else %}
+</p>
 
 {% if error is defined %}
 <p>{{error.message }}</p>
@@ -22,4 +19,3 @@
 <input type="password" name="password"></p>
 <input type="submit" value="Kirjaudu">
 </form>
-{% endif %}
