@@ -11,6 +11,10 @@ def fetch_motd():
     result = db.session.execute(text("SELECT content FROM announcements"))
     return result.fetchall()
 
+def fetch_current_topics():
+    result = db.session.execute(text("SELECT topics.name as name, users.username as username FROM topics JOIN users ON users.id = topics.fk_user_id"))
+    return result.fetchall()
+
 def register_user(username, password):
     hash_value = generate_password_hash(password)
     try:

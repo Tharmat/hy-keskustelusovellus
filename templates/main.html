@@ -1,5 +1,14 @@
 <title>Pääsivu</title>
 <h1>Tämä on pääsivu</h1>
+<br>
+
+<h2>Keskustelualueet</h2>
+{% for topic in topics %}
+<b>
+<p>{{ topic.name }} by {{topic.username}}
+</b>
+{% endfor %}
+
 {% if session.username %}
 <p>Olet kirjautunut nimellä {{ session.username }}</p>
 <a href="/logout">Kirjaudu ulos</a>

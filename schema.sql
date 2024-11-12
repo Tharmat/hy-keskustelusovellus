@@ -6,6 +6,26 @@ CREATE TABLE users (
 );
 
 CREATE TABLE announcements (
-   id serial primary key, 
-   content text
+   id SERIAL PRIMARY KEY, 
+   content TEXT
+);
+
+CREATE TABLE topics (
+   id SERIAL PRIMARY KEY,
+   name TEXT UNIQUE,
+   fk_user_id INTEGER REFERENCES users
+);
+
+CREATE TABLE threads (
+   id SERIAL PRIMARY KEY,
+   name TEXT,
+   fk_user_id INTEGER REFERENCES users
+);
+
+CREATE TABLE messages (
+   id SERIAL PRIMARY KEY,
+   name TEXT,
+   content TEXT,
+   fk_user_id INTEGER REFERENCES users,
+   fk_ketju_id INTEGER REFERENCES threads
 );

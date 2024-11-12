@@ -10,7 +10,7 @@ def index():
 
 @app.route("/main")
 def main():
-    return render_template("main.html")
+    return render_template("main.html", topics= src.db.fetch_current_topics())
 
 @app.route("/login",methods=["POST"])
 def login():
