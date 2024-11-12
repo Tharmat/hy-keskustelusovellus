@@ -8,7 +8,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
 def fetch_motd():
-    result = db.session.execute(text("SELECT content FROM messages"))
+    result = db.session.execute(text("SELECT content FROM announcements"))
     return result.fetchall()
 
 def register_user(username, password):
