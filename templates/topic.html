@@ -2,8 +2,8 @@
 <p>Started by: {{ topic.username }}</p>
 
 {% for thread in threads %}
-<p><b> {{ thread.name }} </b>
-Stared by: {{ thread.username }}
+<p><a href="/topic/{{ topic.id }}/thread/{{ thread.id }}">{{ thread.name }} </a>
+Started by: {{ thread.username }}
 </p>
 {% endfor %}
 

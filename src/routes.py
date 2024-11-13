@@ -64,7 +64,12 @@ def register():
 
         return render_template("error.html", message="Rekisteröinti ei onnistunut")
 
-@app.route("/topic/<int:id>")
+@app.route("/topic/<int:topic_id>")
 @login_required
-def topic(id):
-    return render_template("topic.html", topic = src.db.fetch_topic_by_id(id), threads = src.db.fetch_threads_by_topic_id(id))
+def topic(topic_id):
+    return render_template("topic.html", topic = src.db.fetch_topic_by_id(topic_id), threads = src.db.fetch_threads_by_topic_id(topic_id))
+
+@app.route("/topic/<int:topic_id>/thread/<int:thread_id>")
+@login_required
+def thread(topic_id, thread_id):
+    return render_template("thread.html", topic_id = topic_id, messages = src.db.fetch_messages_by_threads_id(thread_id))

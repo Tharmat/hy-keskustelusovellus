@@ -20,7 +20,11 @@ def fetch_topic_by_id(id):
     return result.fetchone()
 
 def fetch_threads_by_topic_id(id):
-    result = db.session.execute(text("SELECT threads.name as name, users.username as username from threads JOIN users on users.id = threads.fk_user_id where threads.fk_topics_id = :id"), {"id" : id})
+    result = db.session.execute(text("SELECT threads.id as id, threads.name as name, users.username as username from threads JOIN users on users.id = threads.fk_user_id where threads.fk_topics_id = :id"), {"id" : id})
+    return result.fetchall()
+
+def fetch_messages_by_threads_id(threads_id):
+    result = db.session.execute(text("SELECT * FROM messages where fk_threads_id = :threads_id"), {"threads_id" : threads_id})
     return result.fetchall()
 
 def register_user(username, password):

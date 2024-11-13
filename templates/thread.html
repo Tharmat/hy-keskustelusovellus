@@ -1,0 +1,7 @@
+{% for message in messages %}
+<p><b> {{ message.name }} </b>
+<p>{{ message.content }}</p>
+</p>
+{% endfor %}
+
+<a href="/topic/{{ topic_id }}"> Takaisin viestiketjuun</a>
