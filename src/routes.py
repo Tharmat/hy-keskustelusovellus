@@ -12,7 +12,7 @@ def index():
 @app.route("/main")
 @login_required
 def main():
-    return render_template("main.html", topics= src.db.fetch_current_topics())
+    return render_template("main.html", topics = src.db.fetch_current_topics())
 
 @app.route("/login",methods=["GET", "POST"])
 def login():
@@ -63,3 +63,8 @@ def register():
             return redirect("/")
 
         return render_template("error.html", message="Rekisteröinti ei onnistunut")
+
+@app.route("/topic/<int:id>")
+@login_required
+def topic(id):
+    return render_template("topic.html", topic = src.db.fetch_topic_by_id(id), threads = src.db.fetch_threads_by_topic_id(id))

@@ -5,11 +5,12 @@
 <h2>Keskustelualueet</h2>
 {% for topic in topics %}
 <b>
-<p>{{ topic.name }} by {{topic.username}}
+<a href="/topic/{{topic.id}}">{{ topic.name }} by {{topic.username}}</a>
 </b>
 {% endfor %}
 
 {% if session.username %}
+<hr>
 <p>Olet kirjautunut nimellä {{ session.username }}</p>
 <a href="/logout">Kirjaudu ulos</a>
 {% endif %}

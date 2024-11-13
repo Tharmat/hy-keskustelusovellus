@@ -19,7 +19,8 @@ CREATE TABLE topics (
 CREATE TABLE threads (
    id SERIAL PRIMARY KEY,
    name TEXT,
-   fk_user_id INTEGER REFERENCES users
+   fk_user_id INTEGER REFERENCES users,
+   fk_topics_id INTEGER REFERENCES topics
 );
 
 CREATE TABLE messages (
@@ -27,5 +28,5 @@ CREATE TABLE messages (
    name TEXT,
    content TEXT,
    fk_user_id INTEGER REFERENCES users,
-   fk_ketju_id INTEGER REFERENCES threads
+   fk_threads_id INTEGER REFERENCES threads
 );

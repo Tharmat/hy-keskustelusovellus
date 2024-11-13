@@ -12,7 +12,15 @@ def fetch_motd():
     return result.fetchall()
 
 def fetch_current_topics():
-    result = db.session.execute(text("SELECT topics.name as name, users.username as username FROM topics JOIN users ON users.id = topics.fk_user_id"))
+    result = db.session.execute(text("SELECT topics.name as name, topics.id as id, users.username as username FROM topics JOIN users ON users.id = topics.fk_user_id"))
+    return result.fetchall()
+
+def fetch_topic_by_id(id):
+    result = db.session.execute(text("SELECT topics.name as name, topics.id as id, users.username as username FROM topics JOIN users ON users.id = topics.fk_user_id where topics.id= :id"), {"id" : id})
+    return result.fetchone()
+
+def fetch_threads_by_topic_id(id):
+    result = db.session.execute(text("SELECT threads.name as name, users.username as username from threads JOIN users on users.id = threads.fk_user_id where threads.fk_topics_id = :id"), {"id" : id})
     return result.fetchall()
 
 def register_user(username, password):
