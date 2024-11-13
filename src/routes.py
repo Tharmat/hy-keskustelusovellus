@@ -14,9 +14,14 @@ def index():
 def main():
     return render_template("main.html", topics= src.db.fetch_current_topics())
 
-@app.route("/login",methods=["POST"])
+@app.route("/login",methods=["GET", "POST"])
 def login():
-    # TODO: Handle loading login page when user is already logged in. Should redirect to the main page
+
+    # TODO: Hack, but will work for now
+    if request.method == "GET":
+        if session.get("username") is not None:
+            return redirect("/main")
+
     username = request.form["username"]
     password = request.form["password"]
 
@@ -25,7 +30,7 @@ def login():
     if not user:
         # Non-existing username, redirect to registration page
         return redirect("/register")
-    
+
     # Existing user, check password next
     hash_value = user.password
 
