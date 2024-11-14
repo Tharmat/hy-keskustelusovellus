@@ -64,3 +64,15 @@ def create_new_thread(topic_id, thread_name, message_name, message_content, user
         print(error)
         return False
     return True
+
+def create_new_message(thread_id, message_name, message_content, username):
+    try:
+        user_id = get_user_id(username)
+
+        sql = text("INSERT INTO messages (name, content, fk_user_id, fk_threads_id) VALUES (:message_name, :message_content, :user_id, :thread_id);")
+        db.session.execute(sql, {"message_name" : message_name, "message_content" : message_content, "user_id" : user_id, "thread_id" : thread_id})
+        db.session.commit()
+    except Exception as error:
+        print(error)
+        return False
+    return True

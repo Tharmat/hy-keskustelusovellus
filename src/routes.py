@@ -72,11 +72,11 @@ def topic(topic_id):
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>")
 @login_required
 def thread(topic_id, thread_id):
-    return render_template("thread.html", topic_id = topic_id, messages = src.db.fetch_messages_by_threads_id(thread_id))
+    return render_template("thread.html", topic_id = topic_id, thread_id = thread_id, messages = src.db.fetch_messages_by_threads_id(thread_id))
 
 @app.route("/newthread/<int:topic_id>", methods=["GET", "POST"])
 @login_required
-def newtopic(topic_id):
+def new_topic(topic_id):
     if request.method == "GET":
         return render_template("newthread.html", topic_id = topic_id)
     
@@ -86,3 +86,16 @@ def newtopic(topic_id):
         src.db.create_new_thread(topic_id, request.form["thread_name"], request.form["message_name"], request.form["message_content"], session.get("username"))
 
         return redirect(url_for('topic', topic_id = topic_id))
+    
+@app.route("/topic/<int:topic_id>/thread/<int:thread_id>/newmessage/", methods=["GET", "POST"])
+@login_required
+def new_message(topic_id, thread_id):
+    if request.method == "GET":
+        return render_template("newmessage.html", topic_id = topic_id, thread_id = thread_id)
+    
+    if request.method == "POST":
+
+        # TODO: Input sanitization
+        src.db.create_new_message(thread_id, request.form["message_name"], request.form["message_content"], session.get("username"))
+
+        return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))
