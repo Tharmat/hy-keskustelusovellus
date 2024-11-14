@@ -27,6 +27,7 @@ CREATE TABLE messages (
    id SERIAL PRIMARY KEY,
    name TEXT,
    content TEXT,
+   creation_time TIMESTAMP,
    fk_user_id INTEGER REFERENCES users,
    fk_threads_id INTEGER REFERENCES threads
 );

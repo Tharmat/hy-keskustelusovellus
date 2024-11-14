@@ -12,12 +12,13 @@ def fetch_motd():
     return result.fetchall()
 
 def fetch_current_topics():
-    result = db.session.execute(text("""SELECT topics.name as name, topics.id as id, count(messages.id) as message_count
+    result = db.session.execute(text("""SELECT topics.name as name, topics.id as id, count(messages.id) as message_count, COALESCE(max(messages.creation_time), CURRENT_TIMESTAMP) as latest
                                      FROM topics
                                      JOIN users ON users.id = topics.fk_user_id
                                      LEFT JOIN threads ON threads.fk_topics_id = topics.id
                                      LEFT JOIN messages ON messages.fk_threads_id = threads.id
-                                     GROUP BY topics.name, topics.id;"""))
+                                     GROUP BY topics.name, topics.id
+                                     ORDER BY latest DESC;"""))
     return result.fetchall()
 
 def fetch_topic_by_id(id):
@@ -61,7 +62,8 @@ def create_new_thread(topic_id, thread_name, message_name, message_content, user
         result = db.session.execute(sql, {"thread_name" : thread_name, "user_id" : user_id, "topic_id" : topic_id})
         new_thread_id = result.fetchone()[0]
 
-        sql = text("INSERT INTO messages (name, content, fk_user_id, fk_threads_id) VALUES (:message_name, :message_content, :user_id, :new_thread_id);")
+        sql = text("""INSERT INTO messages (name, content, creation_time, fk_user_id, fk_threads_id) 
+                   VALUES (:message_name, :message_content, CURRENT_TIMESTAMP, :user_id, :new_thread_id);""")
         db.session.execute(sql, {"message_name" : message_name, "message_content" : message_content, "user_id" : user_id, "new_thread_id" : new_thread_id})
 
         db.session.commit()
@@ -74,7 +76,8 @@ def create_new_message(thread_id, message_name, message_content, username):
     try:
         user_id = get_user_id(username)
 
-        sql = text("INSERT INTO messages (name, content, fk_user_id, fk_threads_id) VALUES (:message_name, :message_content, :user_id, :thread_id);")
+        sql = text("""INSERT INTO messages (name, content, creation_time, fk_user_id, fk_threads_id) 
+                   VALUES (:message_name, :message_content, CURRENT_TIMESTAMP, :user_id, :thread_id);""")
         db.session.execute(sql, {"message_name" : message_name, "message_content" : message_content, "user_id" : user_id, "thread_id" : thread_id})
         db.session.commit()
     except Exception as error:

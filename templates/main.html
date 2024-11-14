@@ -5,9 +5,9 @@
 <h2>Keskustelualueet</h2>
 {% for topic in topics %}
 <b>
-<a href="/topic/{{topic.id}}">{{ topic.name }} Messages: {{ topic.message_count }}</a>
-
+<a href="/topic/{{topic.id}}">{{ topic.name }} Messages: {{ topic.message_count }} Last activity: {{ topic.latest.strftime("%Y-%m-%d %H:%M:%S") }}</a>
 </b>
+<br>
 {% endfor %}
 
 {% if session.username %}
