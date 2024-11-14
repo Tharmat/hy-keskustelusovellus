@@ -74,7 +74,7 @@ def topic(topic_id):
 def thread(topic_id, thread_id):
     return render_template("thread.html", topic_id = topic_id, thread_id = thread_id, messages = src.db.fetch_messages_by_threads_id(thread_id))
 
-@app.route("/newthread/<int:topic_id>", methods=["GET", "POST"])
+@app.route("/topic/<int:topic_id>/newthread", methods=["GET", "POST"])
 @login_required
 def new_topic(topic_id):
     if request.method == "GET":
