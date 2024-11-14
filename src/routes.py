@@ -1,5 +1,5 @@
 from werkzeug.security import check_password_hash
-from flask import render_template, request, session, redirect
+from flask import render_template, request, session, redirect, url_for
 from app import app
 from src.decorators import login_required
 
@@ -73,3 +73,16 @@ def topic(topic_id):
 @login_required
 def thread(topic_id, thread_id):
     return render_template("thread.html", topic_id = topic_id, messages = src.db.fetch_messages_by_threads_id(thread_id))
+
+@app.route("/newthread/<int:topic_id>", methods=["GET", "POST"])
+@login_required
+def newtopic(topic_id):
+    if request.method == "GET":
+        return render_template("newthread.html", topic_id = topic_id)
+    
+    if request.method == "POST":
+
+        # TODO: Input sanitization
+        src.db.create_new_thread(topic_id, request.form["thread_name"], request.form["message_name"], request.form["message_content"], session.get("username"))
+
+        return redirect(url_for('topic', topic_id = topic_id))

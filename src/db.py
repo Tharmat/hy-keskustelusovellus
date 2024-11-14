@@ -41,3 +41,26 @@ def get_user(username):
     sql = text("SELECT id, password FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     return result.fetchone()
+
+def get_user_id(username):
+    sql = text("SELECT id FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username":username})
+    return result.fetchone()[0]
+
+def create_new_thread(topic_id, thread_name, message_name, message_content, username):
+    try:
+        user_id = get_user_id(username)
+        print("User_id: ", user_id)
+
+        sql = text("INSERT INTO threads (name, fk_user_id, fk_topics_id) values (:thread_name, :user_id, :topic_id) RETURNING id;" )
+        result = db.session.execute(sql, {"thread_name" : thread_name, "user_id" : user_id, "topic_id" : topic_id})
+        new_thread_id = result.fetchone()[0]
+
+        sql = text("INSERT INTO messages (name, content, fk_user_id, fk_threads_id) VALUES (:message_name, :message_content, :user_id, :new_thread_id);")
+        db.session.execute(sql, {"message_name" : message_name, "message_content" : message_content, "user_id" : user_id, "new_thread_id" : new_thread_id})
+
+        db.session.commit()
+    except Exception as error:
+        print(error)
+        return False
+    return True
