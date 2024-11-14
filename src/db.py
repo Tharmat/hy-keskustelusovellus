@@ -12,7 +12,12 @@ def fetch_motd():
     return result.fetchall()
 
 def fetch_current_topics():
-    result = db.session.execute(text("SELECT topics.name as name, topics.id as id, users.username as username FROM topics JOIN users ON users.id = topics.fk_user_id"))
+    result = db.session.execute(text("""SELECT topics.name as name, topics.id as id, count(messages.id) as message_count
+                                     FROM topics
+                                     JOIN users ON users.id = topics.fk_user_id
+                                     JOIN threads ON threads.fk_topics_id = topics.id
+                                     JOIN messages ON messages.fk_threads_id = threads.id
+                                     GROUP BY topics.name, topics.id;"""))
     return result.fetchall()
 
 def fetch_topic_by_id(id):
