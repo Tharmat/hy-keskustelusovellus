@@ -10,6 +10,7 @@ Pääpiirteittäin toimii kuten moni muukin "bulletin board" -softa, eli tarjoll
 - Ylläpitäjä (samat oikeudet ja toiminnot kuin käyttäjällä, mutta pystyy lisäämään/poistamaan keskustelualueita sekä poistamaan myös toisten käyttäjien viestejä)
 
 ## Pääominaisuudet (alustava määrittely)
+(ruksatut kohdat toteutettu as of 17.11.2024)
 - [x] Käyttäjä pystyy luomaan uuden tunnuksen ("rekisteröitymään") ja kirjautumaan tunnuksella palveluun, sekä kirjautumaan ulos palvelusta.
 - [x] Käyttäjä näkee kirjauduttuaan listan keskustealueista, jokaisen alueen viestimäärän ja koska alueelle on edellisen kerran lisätty viesti
 - [x] Käyttäjä voi lisätä uuden ketjun haluamalleen keskustelualueelle antamalla ketjulle otsikon ja aloitusviestin
@@ -26,4 +27,5 @@ Oletuksena että asennettuna git, python3, PostgreSQL jne.
 2. Repossa tiedostossa `requirements.txt` listattu vaadittavat riippuvuudet jotka täytyy asentaa esim. komennolla `pip install -r requirements.txt`
 3. Repon juuresta täytyy löytyä tiedosto `.secret_env` joka sisältää rivin `SECRET_KEY=xxx` jossa `xxx` on jokin satunnaisesti valittu avain
 4. Sovellus käyttää oletuksena _testitietokantaa_ `postgresql://postgres:admin@localhost`. Käytetyn kannan voi määrittää tiedostossa `.env`
-5. Aja Flask komennolla `flask run`
+5. Repossa on tiedosto `schemas.sql` joka tulee ajaa käytettyyn kantaan käsin / haluamallaan työkalulla
+6. Aja Flask komennolla `flask run`
