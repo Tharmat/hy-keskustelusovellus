@@ -28,4 +28,6 @@ Oletuksena että asennettuna git, python3, PostgreSQL jne.
 3. Repon juuresta täytyy löytyä tiedosto `.secret_env` joka sisältää rivin `SECRET_KEY=xxx` jossa `xxx` on jokin satunnaisesti valittu avain
 4. Sovellus käyttää oletuksena _testitietokantaa_ `postgresql://postgres:admin@localhost`. Käytetyn kannan voi määrittää tiedostossa `.env`
 5. Repossa on tiedosto `schemas.sql` joka tulee ajaa käytettyyn kantaan käsin / haluamallaan työkalulla
-6. Aja Flask komennolla `flask run`
+6. Aja lisäksi `seed.sql` tietokantaan. Tämä tiedosto luo minimaalisen testisetupin. 
+7. Aja Flask komennolla `flask run`
+8. Luo uusi käyttäjä rekisteröintisivulla tai kirjaudu sisään admin-tunnuksilla (admin/admin)
