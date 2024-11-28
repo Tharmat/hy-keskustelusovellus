@@ -25,8 +25,7 @@ Oletuksena että asennettuna git, python3, PostgreSQL jne.
 
 1. Kloonaa repo
 2. Repossa tiedostossa `requirements.txt` listattu vaadittavat riippuvuudet jotka täytyy asentaa esim. komennolla `pip install -r requirements.txt`
-3. Repon juuresta täytyy löytyä tiedosto `.secret_env` joka sisältää rivin `SECRET_KEY=xxx` jossa `xxx` on jokin satunnaisesti valittu avain
-4. Sovellus käyttää oletuksena _testitietokantaa_ `postgresql://postgres:admin@localhost`. Käytetyn kannan voi määrittää tiedostossa `.env`
+3. Repon juuresta täytyy löytyä `.env` tiedosto jossa on sovelluksen käyttämä `SECRET_KEY` ja tietokannan osoite `DATABASE_URL`
 5. Repossa on tiedosto `schemas.sql` joka tulee ajaa käytettyyn kantaan käsin / haluamallaan työkalulla
 6. Aja lisäksi `seed.sql` tietokantaan. Tämä tiedosto luo minimaalisen testisetupin. 
 7. Aja Flask komennolla `flask run`
