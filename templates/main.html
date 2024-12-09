@@ -1,17 +1,13 @@
 <title>Pääsivu</title>
-<h1>Tämä on pääsivu</h1>
-<br>
+<body>
+    <h1>Tämä on pääsivu</h1>
+    <br>
+    <h2>Keskustelualueet</h2>
 
-<h2>Keskustelualueet</h2>
-{% for topic in topics %}
-<b>
-<a href="/topic/{{topic.id}}">{{ topic.name }} Messages: {{ topic.message_count }} Last activity: {{ topic.latest.strftime("%Y-%m-%d %H:%M:%S") }}</a>
-</b>
-<br>
-{% endfor %}
-
-{% if session.username %}
-<hr>
-<p>Olet kirjautunut nimellä {{ session.username }}</p>
-<a href="/logout">Kirjaudu ulos</a>
-{% endif %}
+    {% for topic in topics %}
+    <b><a href="/topic/{{topic.id}}">{{ topic.name }} Messages: {{ topic.message_count }} Last activity: {{ topic.latest.strftime("%Y-%m-%d %H:%M:%S") }}</a></b>
+    <br>
+    {% endfor %}
+    
+    {% include 'footer.html' %}
+</body>

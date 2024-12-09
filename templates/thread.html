@@ -1,10 +1,13 @@
-{% for message in messages %}
-<p><b> {{ message.name }} </b>
-<p>{{ message.content }}</p>
-</p>
-{% endfor %}
+<body>
+    {% for message in messages %}
+    <p><b> {{ message.name }} </b>
+    <p>{{ message.content }}</p>
+    </p>
+    {% endfor %}
 
-<br>
-<a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/newmessage">Lisää uusi viesti</a>
-<br>
-<a href="/topic/{{ topic_id }}"> Takaisin viestiketjuun</a>
+    <br>
+    <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/newmessage">Lisää uusi viesti</a>
+    <br>
+    <a href="/topic/{{ topic_id }}"> Takaisin viestiketjuun</a>
+    {% include 'footer.html' %}
+</body>

@@ -1,0 +1,12 @@
+{% if session.username %}
+<hr>
+<p>Olet kirjautunut nimellä {{ session.username }}</p>
+
+<form action="/logout" method="GET">
+        <input type="submit" value="Kirjaudu ulos">
+</form>
+
+<form action="/main" method="GET">
+        <input type="submit" value="Takaisin etusivulle">
+</form>
+{% endif %}

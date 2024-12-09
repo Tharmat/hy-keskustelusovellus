@@ -1,9 +1,13 @@
-<form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/newmessage" method="POST">
-    Viestin otsikko:
-    <input type="text" name="message_name">
-    <br>
-    Viesti:
-    <textarea name="message_content" rows="3" cols="40"></textarea>
-    <br>
-    <input type="submit" value="Lähetä">
+<body>
+    <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/newmessage" method="POST">
+        Viestin otsikko:
+        <input type="text" name="message_name">
+        <br>
+        Viesti:
+        <textarea name="message_content" rows="3" cols="40"></textarea>
+        <br>
+        <input type="submit" value="Lähetä">
     </form>
+
+    {% include 'footer.html' %}
+</body>
