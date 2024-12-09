@@ -2,7 +2,7 @@
     {% for message in messages %}
     <p><b> {{ message.name }} </b>
     <p>{{ message.content }}</p>
-    </p>
+    <p>Created by: {{ message.username }} at {{ message.creation_time }}</p>
     {% endfor %}
 
     <br>
