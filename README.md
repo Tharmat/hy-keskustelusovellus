@@ -24,8 +24,17 @@ Pääpiirteittäin toimii kuten moni muukin "bulletin board" -softa, eli tarjoll
 Oletuksena että asennettuna git, python3, PostgreSQL jne.
 
 1. Kloonaa repo
-2. Repossa tiedostossa `requirements.txt` listattu vaadittavat riippuvuudet jotka täytyy asentaa esim. komennolla `pip install -r requirements.txt`
-3. Repon juuresta täytyy löytyä `.env` tiedosto jossa on sovelluksen käyttämä `SECRET_KEY` ja tietokannan osoite `DATABASE_URL`
+2. Käynnistä luo virutaaliympäristö ja käynnistä se, sekä asenna riippuvuudet, esim. seuraavilla komennoilla
+```
+python3 -m venv venv
+source venv/bin/activate
+pip install -r ./requirements.txt
+```
+3. Repon juuresta täytyy löytyä `.env` tiedosto jossa on sovelluksen käyttämä tiedot `SECRET_KEY` ja `DATABASE_URL`
+```
+DATABASE_URL=postgresql://<username:password@hostname>
+SECRET_KEY=<randomly generate secret key>
+```
 5. Repossa on tiedosto `schemas.sql` joka tulee ajaa käytettyyn kantaan käsin / haluamallaan työkalulla
 6. Aja lisäksi `seed.sql` tietokantaan. Tämä tiedosto luo minimaalisen testisetupin. 
 7. Aja Flask komennolla `flask run`
