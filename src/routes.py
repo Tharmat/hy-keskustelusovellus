@@ -1,10 +1,9 @@
-from werkzeug.security import check_password_hash
+import secrets
 from flask import render_template, request, session, redirect, url_for
 from app import app
-from src.decorators import login_required
-from src.common import check_csrf_token
-import secrets
+from werkzeug.security import check_password_hash
 import src.db
+from src.common import check_csrf_token, login_required
 
 @app.route("/")
 def index():
