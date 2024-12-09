@@ -8,25 +8,46 @@ app.config["SQLALCHEMY_DATABASE_URI"] = getenv("DATABASE_URL")
 db = SQLAlchemy(app)
 
 def fetch_motd():
-    result = db.session.execute(text("SELECT content FROM announcements"))
+    result = db.session.execute(text("""SELECT 
+                                            content 
+                                        FROM announcements"""))
     return result.fetchall()
 
 def fetch_current_topics():
-    result = db.session.execute(text("""SELECT topics.name as name, topics.id as id, count(messages.id) as message_count, COALESCE(max(messages.creation_time), CURRENT_TIMESTAMP) as latest
-                                     FROM topics
-                                     JOIN users ON users.id = topics.fk_user_id
-                                     LEFT JOIN threads ON threads.fk_topics_id = topics.id
-                                     LEFT JOIN messages ON messages.fk_threads_id = threads.id
-                                     GROUP BY topics.name, topics.id
-                                     ORDER BY latest DESC;"""))
+    result = db.session.execute(text("""SELECT 
+                                            topics.name as name, 
+                                            topics.id as id, 
+                                            count(messages.id) as message_count, 
+                                            COALESCE(max(messages.creation_time), 
+                                            CURRENT_TIMESTAMP) as latest
+                                        FROM topics
+                                        JOIN users ON users.id = topics.fk_user_id
+                                        LEFT JOIN threads ON threads.fk_topics_id = topics.id
+                                        LEFT JOIN messages ON messages.fk_threads_id = threads.id
+                                        GROUP BY topics.name, topics.id
+                                        ORDER BY latest DESC;"""))
     return result.fetchall()
 
 def fetch_topic_by_id(id):
-    result = db.session.execute(text("SELECT topics.name as name, topics.id as id, users.username as username FROM topics JOIN users ON users.id = topics.fk_user_id where topics.id= :id"), {"id" : id})
+    result = db.session.execute(text("""SELECT 
+                                            topics.name as name, 
+                                            topics.id as id, 
+                                            users.username as username 
+                                        FROM topics 
+                                        JOIN users ON users.id = topics.fk_user_id 
+                                        WHERE topics.id= :id"""), 
+                                     {"id" : id})
     return result.fetchone()
 
 def fetch_threads_by_topic_id(id):
-    result = db.session.execute(text("SELECT threads.id as id, threads.name as name, users.username as username from threads JOIN users on users.id = threads.fk_user_id where threads.fk_topics_id = :id"), {"id" : id})
+    result = db.session.execute(text("""SELECT 
+                                        threads.id as id, 
+                                        threads.name as name, 
+                                        users.username as username 
+                                    FROM threads 
+                                    JOIN users on users.id = threads.fk_user_id 
+                                    WHERE threads.fk_topics_id = :id"""), 
+                                    {"id" : id})
     return result.fetchall()
 
 def fetch_messages_by_threads_id(threads_id):
