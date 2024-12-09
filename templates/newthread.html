@@ -1,4 +1,6 @@
 <body>
+    {% include 'error.html' %}
+
     <form action="/topic/{{ topic_id }}/newthread" method="post">
         Uuden ketjun nimi: 
         <input type="text" name="thread_name">

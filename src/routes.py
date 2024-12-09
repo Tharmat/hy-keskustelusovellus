@@ -86,7 +86,7 @@ def thread(topic_id, thread_id):
 
 @app.route("/topic/<int:topic_id>/newthread", methods=["GET", "POST"])
 @login_required
-def new_topic(topic_id):
+def new_thread(topic_id):
     if request.method == "GET":
         return render_template("newthread.html", topic_id = topic_id)
     

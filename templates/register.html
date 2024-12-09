@@ -1,9 +1,7 @@
 <title>Rekisteröitymissivu</title>
 <h1>Rekisteröidy!</h1>
 
-{% if error is defined %}
-<p>{{error.message }}</p>
-{% endif %}
+{% include 'error.html' %}
 
 <form action="/register" method="post">
     Tunnus: <input type="text" name="username" value="{{username}}">
