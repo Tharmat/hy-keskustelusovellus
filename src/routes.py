@@ -92,7 +92,16 @@ def new_thread(topic_id):
     
     if request.method == "POST":
 
-        # TODO: Input sanitization
+        # Basic validations
+        if not request.form["thread_name"]:
+            return render_template("newthread.html", topic_id = topic_id, error = {'message': "Ketjun nimi tyhjä, anna ketjun nimi."})
+    
+        if not request.form["message_name"]:
+            return render_template("newthread.html", topic_id = topic_id, error = {'message': "Viestin otsikko on tyhjä, anna viestin otsikko."})
+
+        if not request.form["message_content"]:
+            return render_template("newthread.html", topic_id = topic_id, error = {'message': "Viestin sisältö on tyhjä, anna viestin sisältö."})
+
         src.db.create_new_thread(topic_id, request.form["thread_name"], request.form["message_name"], request.form["message_content"], session.get("username"))
 
         return redirect(url_for('topic', topic_id = topic_id))
@@ -105,7 +114,13 @@ def new_message(topic_id, thread_id):
     
     if request.method == "POST":
 
-        # TODO: Input sanitization
+        # Basic validations
+        if not request.form["message_name"]:
+            return render_template("newmessage.html", topic_id = topic_id, thread_id = thread_id, error = {'message': "Viestin otsikko on tyhjä, anna viestin otsikko."})
+    
+        if not request.form["message_content"]:
+            return render_template("newmessage.html", topic_id = topic_id, thread_id = thread_id, error = {'message': "Viestin sisältö on tyhjä, anna viestin sisältö."})
+        
         src.db.create_new_message(thread_id, request.form["message_name"], request.form["message_content"], session.get("username"))
 
         return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))
