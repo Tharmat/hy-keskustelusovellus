@@ -2,7 +2,8 @@ from werkzeug.security import check_password_hash
 from flask import render_template, request, session, redirect, url_for
 from app import app
 from src.decorators import login_required
-
+from src.common import check_csrf_token
+import secrets
 import src.db
 
 @app.route("/")
@@ -36,6 +37,9 @@ def login():
 
     if check_password_hash(hash_value, password):
         session["username"] = username
+
+        # Generate new csrf_token
+        session["csrf_token"] = secrets.token_hex(16)
         return redirect("/main")
 
     # Password is wrong
@@ -44,6 +48,9 @@ def login():
 @app.route("/logout")
 def logout():
     del session["username"]
+
+    # Delete csrf_token to prevent reuse
+    del session["csrf_token"]
     return redirect("/")
 
 @app.route("/register", methods=["GET", "POST"])
@@ -91,6 +98,7 @@ def new_thread(topic_id):
         return render_template("newthread.html", topic_id = topic_id)
     
     if request.method == "POST":
+        check_csrf_token(request)
 
         # Basic validations
         if not request.form["thread_name"]:
@@ -113,6 +121,7 @@ def new_message(topic_id, thread_id):
         return render_template("newmessage.html", topic_id = topic_id, thread_id = thread_id)
     
     if request.method == "POST":
+        check_csrf_token(request)
 
         # Basic validations
         if not request.form["message_name"]:
