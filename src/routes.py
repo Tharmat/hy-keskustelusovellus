@@ -56,13 +56,23 @@ def register():
         password1 = request.form["password1"]
         password2 = request.form["password2"]
 
+        # Basic validation and error handling
+        if not username:
+            return render_template("register.html", error = {'message': "Käyttäjänimi ei voi olla tyhjä, anna käyttäjänimi."})
+
+        if src.db.user_exists(username):
+            return render_template("register.html", error = {'message': "Käyttäjänimi jo käytössä, valitse uusi käyttäjänimi."})
+
+        if not password1 or not password2:
+            return render_template("register.html", username = username, error = {'message': "Anna salasana kahteen kertaan."})
+
         if password1 != password2:
-            return render_template("error.html", message="Salasanat eroavat")
+            return render_template("register.html", username = username, error = {'message': "Salasanat eroavat, tarkasta salasana."})
 
         if src.db.register_user(username, password1):
             return redirect("/")
 
-        return render_template("error.html", message="Rekisteröinti ei onnistunut")
+        return render_template("register.html", username = username, error = {'message': "Rekisteröinti ei onnistunut, yritä myöhemmin uudelleen."})
 
 @app.route("/topic/<int:topic_id>")
 @login_required

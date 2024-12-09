@@ -43,6 +43,11 @@ def register_user(username, password):
         return False
     return True
 
+def user_exists(username):
+    sql = text("SELECT 1 FROM users WHERE username=:username")
+    result = db.session.execute(sql, {"username":username})
+    return result.fetchone()
+
 def get_user(username):
     sql = text("SELECT id, password FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
