@@ -1,0 +1,19 @@
+<body>
+    {% include 'error.html' %}
+    {% if message %}
+    <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id }}" method="POST">
+    {% else %}
+    <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message" method="POST">
+    {% endif %}
+        Viestin otsikko:
+        <input type="text" name="message_name" value="{{ message.name }}">
+        <br>
+        Viesti:
+        <textarea name="message_content" rows="3" cols="40">{{ message.content }}</textarea>
+        <br>
+        <input type="submit" value="Lähetä">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+
+    {% include 'footer.html' %}
+</body>

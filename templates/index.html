@@ -8,9 +8,7 @@
 {% endfor %}
 </p>
 
-{% if error is defined %}
-<p>{{error.message }}</p>
-{% endif %}
+{% include 'error.html' %}
 
 <form action="/login" method="POST">
     <p>Tunnus:<br>

@@ -50,16 +50,24 @@ def fetch_threads_by_topic_id(id):
                                     {"id" : id})
     return result.fetchall()
 
-def fetch_messages_by_threads_id(threads_id):
+def fetch_messages_by_threads_id(threads_id, username):
+    user_id = get_user_id(username)
+
     result = db.session.execute(text("""SELECT
+                                            messages.id as id,
                                             messages.name as name, 
                                             messages.content as content, 
                                             messages.creation_time as creation_time, 
-                                            users.username as username
+                                            users.username as username,
+                                            CASE 
+                                                WHEN messages.fk_user_id = :user_id 
+                                                    THEN 1
+                                                    ELSE 0 END
+                                            as can_edit
                                         FROM messages 
                                         JOIN users on users.id = messages.fk_user_id
                                         WHERE messages.fk_threads_id = :threads_id"""), 
-                                        {"threads_id" : threads_id})
+                                        {"threads_id" : threads_id, "user_id" : user_id})
     return result.fetchall()
 
 def register_user(username, password):
@@ -78,7 +86,7 @@ def user_exists(username):
     return result.fetchone()
 
 def get_user(username):
-    sql = text("SELECT id, password FROM users WHERE username=:username")
+    sql = text("SELECT * FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     return result.fetchone()
 
@@ -118,3 +126,27 @@ def create_new_message(thread_id, message_name, message_content, username):
         print(error)
         return False
     return True
+
+def update_message(message_id, message_name, message_content):
+    try:
+        sql = text("""UPDATE messages
+                   SET name = :message_name, content = :message_content
+                   WHERE
+                   id = :message_id""")
+        db.session.execute(sql, {"message_name" : message_name, "message_content" : message_content, "message_id" : message_id})
+        db.session.commit()
+    except Exception as error:
+        print(error)
+        return False
+    return True
+
+# TODO: Probably should use user_id instead as it is more strictly enforced on db level than username
+def user_is_admin(username):
+    sql = text("SELECT 1 FROM users WHERE username=:username and is_admin = true")
+    result = db.session.execute(sql, {"username" : username})
+    return result.fetchone()
+
+def get_message(message_id):
+    sql = text("SELECT * FROM messages where id = :message_id")
+    result = db.session.execute(sql, {"message_id" : message_id})
+    return result.fetchone()

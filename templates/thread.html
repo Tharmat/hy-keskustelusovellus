@@ -3,10 +3,14 @@
     <p><b> {{ message.name }} </b>
     <p>{{ message.content }}</p>
     <p>Created by: {{ message.username }} at {{ message.creation_time }}</p>
+
+    {% if message.can_edit%}
+    <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id}}">Muokkaa viestiä</a>
+    {% endif %}
     {% endfor %}
 
     <br>
-    <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/newmessage">Lisää uusi viesti</a>
+    <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/message">Lisää uusi viesti</a>
     <br>
     <a href="/topic/{{ topic_id }}"> Takaisin viestiketjuun</a>
     {% include 'footer.html' %}

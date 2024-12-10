@@ -39,6 +39,7 @@ def login():
 
         # Generate new csrf_token
         session["csrf_token"] = secrets.token_hex(16)
+
         return redirect("/main")
 
     # Password is wrong
@@ -88,7 +89,7 @@ def topic(topic_id):
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>")
 @login_required
 def thread(topic_id, thread_id):
-    return render_template("thread.html", topic_id = topic_id, thread_id = thread_id, messages = src.db.fetch_messages_by_threads_id(thread_id))
+    return render_template("thread.html", topic_id = topic_id, thread_id = thread_id, messages = src.db.fetch_messages_by_threads_id(thread_id, session.get("username")))
 
 @app.route("/topic/<int:topic_id>/newthread", methods=["GET", "POST"])
 @login_required
@@ -112,23 +113,53 @@ def new_thread(topic_id):
         src.db.create_new_thread(topic_id, request.form["thread_name"], request.form["message_name"], request.form["message_content"], session.get("username"))
 
         return redirect(url_for('topic', topic_id = topic_id))
-    
-@app.route("/topic/<int:topic_id>/thread/<int:thread_id>/newmessage/", methods=["GET", "POST"])
+
+# Slightly too smart way to use the same route for both creating a new message as well as editing an existing message
+@app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/", methods=["GET", "POST"])
+@app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/<int:message_id>", methods=["GET", "POST"])
 @login_required
-def new_message(topic_id, thread_id):
+def message(topic_id, thread_id, message_id = None):
+
     if request.method == "GET":
-        return render_template("newmessage.html", topic_id = topic_id, thread_id = thread_id)
-    
+        # Create new message
+        if not message_id:
+            return render_template("message.html", topic_id = topic_id, thread_id = thread_id, message = None)
+        
+        # If User is the creator of the message OR is admin then show edit page
+        user = src.db.get_user(session.get("username"))
+        message = src.db.get_message(message_id)
+
+        if user.id == message.fk_user_id or user.is_admin:
+            return render_template("message.html", topic_id = topic_id, thread_id = thread_id, message = message)
+        
+        # Else redirect to threads.html
+        return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))
+
     if request.method == "POST":
         check_csrf_token(request)
 
+        message = None
+        if message_id:
+            message = src.db.get_message(message_id)
+
         # Basic validations
         if not request.form["message_name"]:
-            return render_template("newmessage.html", topic_id = topic_id, thread_id = thread_id, error = {'message': "Viestin otsikko on tyhjä, anna viestin otsikko."})
+            return render_template("message.html", topic_id = topic_id, thread_id = thread_id, message = message, error = {'message': "Viestin otsikko on tyhjä, anna viestin otsikko."})
     
         if not request.form["message_content"]:
-            return render_template("newmessage.html", topic_id = topic_id, thread_id = thread_id, error = {'message': "Viestin sisältö on tyhjä, anna viestin sisältö."})
+            return render_template("message.html", topic_id = topic_id, thread_id = thread_id, message = message, error = {'message': "Viestin sisältö on tyhjä, anna viestin sisältö."})
         
-        src.db.create_new_message(thread_id, request.form["message_name"], request.form["message_content"], session.get("username"))
+        # Create new message
+        if not message:
+            src.db.create_new_message(thread_id, request.form["message_name"], request.form["message_content"], session.get("username"))
+        
+        # Else update existing message
+        else:
+        
+        # If User is the creator of the message OR is admin then accept the edits
+            user = src.db.get_user(session.get("username"))
+            
+            if user.id == message.fk_user_id or user.is_admin:
+                src.db.update_message(message_id, request.form["message_name"], request.form["message_content"])
 
         return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))
