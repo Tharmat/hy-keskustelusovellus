@@ -120,7 +120,6 @@ def new_thread(topic_id):
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/<int:message_id>", methods=["GET", "POST"])
 @login_required
 def message(topic_id, thread_id, message_id = None):
-
     if request.method == "GET":
         # Create new message
         if not message_id:
@@ -129,10 +128,7 @@ def message(topic_id, thread_id, message_id = None):
         user = src.db.get_user(session.get("username"))
         message = src.db.get_message(message_id)
 
-        # If message is not removed AND
-        # User is the creator of the message OR is admin then show edit page
-        if not message.removed:
-            if user.id == message.fk_created_by_user_id or user.is_admin:
+        if user_can_modify(message_id, user):
                 return render_template("message.html", topic_id = topic_id, thread_id = thread_id, message = message)
         
         # Else redirect to threads.html
@@ -173,9 +169,15 @@ def delete_message(topic_id, thread_id, message_id):
     check_csrf_token(request)
 
     user = src.db.get_user(session.get("username"))
-    message = src.db.get_message(message_id)
 
-    if user.id == message.fk_created_by_user_id or user.is_admin:
+    if user_can_modify(message_id, user):
         src.db.delete_message(message_id, user.id)
     
     return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))
+
+def user_can_modify(message_id, user):
+    message = src.db.get_message(message_id)
+
+    if not message.removed:
+        if user.id == message.fk_created_by_user_id or user.is_admin:
+            return True
