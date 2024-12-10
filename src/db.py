@@ -103,8 +103,6 @@ def get_user_id(username):
 def create_new_thread(topic_id, thread_name, message_name, message_content, username):
     try:
         user_id = get_user_id(username)
-        print("User_id: ", user_id)
-
         sql = text("INSERT INTO threads (name, fk_user_id, fk_topics_id) values (:thread_name, :user_id, :topic_id) RETURNING id;" )
         result = db.session.execute(sql, {"thread_name" : thread_name, "user_id" : user_id, "topic_id" : topic_id})
         new_thread_id = result.fetchone()[0]

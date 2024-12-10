@@ -99,8 +99,11 @@ def new_topic():
         if request.method == "POST":
             if not request.form["topic_name"]:
                 return render_template("newtopic.html", error = {'message': "Keskustelualueen nimi ei voi olla tyhjä, anna keskustelualueen nimi"})
-            src.db.create_new_topic(request.form["topic_name"], user.id)
-            
+            if src.db.create_new_topic(request.form["topic_name"], user.id):
+                return render_template("main.html", topics = src.db.fetch_current_topics(), is_admin = user.is_admin)
+            return render_template("newtopic.html", error = {'message': "Uuden keskustelualueen luominen epäonnistui, kokeile uudestaan."})
+    
+    # If user is not admin, return main page
     return render_template("main.html", topics = src.db.fetch_current_topics(), is_admin = user.is_admin)
 
 @app.route("/topic/<int:topic_id>/delete", methods = ["POST"])
@@ -138,9 +141,9 @@ def new_thread(topic_id):
         if not request.form["message_content"]:
             return render_template("newthread.html", topic_id = topic_id, error = {'message': "Viestin sisältö on tyhjä, anna viestin sisältö."})
 
-        src.db.create_new_thread(topic_id, request.form["thread_name"], request.form["message_name"], request.form["message_content"], session.get("username"))
-
-        return redirect(url_for('topic', topic_id = topic_id))
+        if src.db.create_new_thread(topic_id, request.form["thread_name"], request.form["message_name"], request.form["message_content"], session.get("username")):
+            return redirect(url_for('topic', topic_id = topic_id))
+        return render_template("newthread.html", topic_id = topic_id, error = {'message': "Uuden ketjun luominen epäonnistui, yritä uudelleen."})
 
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/delete", methods = ["POST"])
 @login_required
@@ -191,8 +194,7 @@ def message(topic_id, thread_id, message_id = None):
         
         # Else update existing message
         else:
-        
-        # If User is the creator of the message OR is admin then accept the edits
+            # If User is the creator of the message OR is admin then accept the edits
             user = src.db.get_user(session.get("username"))
             
             if user.id == message.fk_created_by_user_id or user.is_admin:
