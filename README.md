@@ -10,14 +10,16 @@ Pääpiirteittäin toimii kuten moni muukin "bulletin board" -softa, eli tarjoll
 - Ylläpitäjä (samat oikeudet ja toiminnot kuin käyttäjällä, mutta pystyy lisäämään/poistamaan keskustelualueita sekä poistamaan myös toisten käyttäjien viestejä)
 
 ## Pääominaisuudet (alustava määrittely)
-(ruksatut kohdat toteutettu as of 17.11.2024)
+(ruksatut kohdat toteutettu as of 10.12.2024)
 - [x] Käyttäjä pystyy luomaan uuden tunnuksen ("rekisteröitymään") ja kirjautumaan tunnuksella palveluun, sekä kirjautumaan ulos palvelusta.
 - [x] Käyttäjä näkee kirjauduttuaan listan keskustealueista, jokaisen alueen viestimäärän ja koska alueelle on edellisen kerran lisätty viesti
 - [x] Käyttäjä voi lisätä uuden ketjun haluamalleen keskustelualueelle antamalla ketjulle otsikon ja aloitusviestin
-- [x] Käyttäjä pystyy lisäämään viestin/kommentin toisten käyttäjien aloittamiin ketjuihin
-- [ ] (preliminary, eihän mikään oikea softa toimi näin) Käyttäjä voi muokata omia viestejään ja aloittamansa ketjun otsikkoa. Käyttäjä voi myös poistaa omia viestejään tai aloittamansa ketjun.
+- [x] Käyttäjä pystyy lisäämään viestin ketjuun
+- [x] Käyttäjä voi muokata omia viestejään
+- [ ] Käyttäjä voi poistaa omia viestejään
 - [ ] Käyttäjä voi myös etsiä olemassaolevista viesteistä ne joissa on annettu hakusana
-- [ ] Ylläpitäjä voi edellisten lisäksi poistaa/lisätä keskustelualueita ja poistaa/muokata myös toisten käyttäjien viestejä/ketjuja
+- [ ] Ylläpitäjä voi poistaa muokata mitä tahansa keskustelualuetta, ketjua tai viestin
+- [ ] Ylläpitäjä voi poistaa minkä tahansa keskustelualueen, ketjun tai viestin
 - [ ] Ylläpitäjä voi merkitä minkä tahansa keskustelualueen "salaiseksi" ja määrittää kenellä on sinne pääsy
 
 ## Käyttö
