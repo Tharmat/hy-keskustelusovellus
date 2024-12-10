@@ -107,8 +107,8 @@ def create_new_thread(topic_id, thread_name, message_name, message_content, user
         result = db.session.execute(sql, {"thread_name" : thread_name, "user_id" : user_id, "topic_id" : topic_id})
         new_thread_id = result.fetchone()[0]
 
-        sql = text("""INSERT INTO messages (name, content, creation_time, fk_user_id, fk_threads_id) 
-                   VALUES (:message_name, :message_content, CURRENT_TIMESTAMP, :user_id, :new_thread_id);""")
+        sql = text("""INSERT INTO messages (name, content, fk_created_by_user_id, fk_threads_id) 
+                   VALUES (:message_name, :message_content, :user_id, :new_thread_id);""")
         db.session.execute(sql, {"message_name" : message_name, "message_content" : message_content, "user_id" : user_id, "new_thread_id" : new_thread_id})
 
         db.session.commit()
