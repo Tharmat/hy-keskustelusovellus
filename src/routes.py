@@ -129,7 +129,7 @@ def message(topic_id, thread_id, message_id = None):
         user = src.db.get_user(session.get("username"))
         message = src.db.get_message(message_id)
 
-        if user.id == message.fk_user_id or user.is_admin:
+        if user.id == message.fk_created_by_user_id or user.is_admin:
             return render_template("message.html", topic_id = topic_id, thread_id = thread_id, message = message)
         
         # Else redirect to threads.html
@@ -159,7 +159,7 @@ def message(topic_id, thread_id, message_id = None):
         # If User is the creator of the message OR is admin then accept the edits
             user = src.db.get_user(session.get("username"))
             
-            if user.id == message.fk_user_id or user.is_admin:
-                src.db.update_message(message_id, request.form["message_name"], request.form["message_content"])
+            if user.id == message.fk_created_by_user_id or user.is_admin:
+                src.db.update_message(message_id, request.form["message_name"], request.form["message_content"], user.id)
 
         return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))

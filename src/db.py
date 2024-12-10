@@ -58,14 +58,17 @@ def fetch_messages_by_threads_id(threads_id, username):
                                             messages.name as name, 
                                             messages.content as content, 
                                             messages.creation_time as creation_time, 
-                                            users.username as username,
+                                            users1.username as username,
                                             CASE 
-                                                WHEN messages.fk_user_id = :user_id 
+                                                WHEN messages.fk_created_by_user_id = :user_id 
                                                     THEN 1
                                                     ELSE 0 END
-                                            as can_edit
-                                        FROM messages 
-                                        JOIN users on users.id = messages.fk_user_id
+                                            as can_edit,
+                                            messages.modification_time as modification_time,
+                                            users2.username as modified_by
+                                        FROM messages
+                                        JOIN users users1 on users1.id = messages.fk_created_by_user_id
+                                        LEFT JOIN users users2 on users2.id = messages.fk_modified_by_user_id
                                         WHERE messages.fk_threads_id = :threads_id"""), 
                                         {"threads_id" : threads_id, "user_id" : user_id})
     return result.fetchall()
@@ -118,8 +121,8 @@ def create_new_message(thread_id, message_name, message_content, username):
     try:
         user_id = get_user_id(username)
 
-        sql = text("""INSERT INTO messages (name, content, creation_time, fk_user_id, fk_threads_id) 
-                   VALUES (:message_name, :message_content, CURRENT_TIMESTAMP, :user_id, :thread_id);""")
+        sql = text("""INSERT INTO messages (name, content, fk_created_by_user_id, fk_threads_id) 
+                   VALUES (:message_name, :message_content, :user_id, :thread_id);""")
         db.session.execute(sql, {"message_name" : message_name, "message_content" : message_content, "user_id" : user_id, "thread_id" : thread_id})
         db.session.commit()
     except Exception as error:
@@ -127,13 +130,13 @@ def create_new_message(thread_id, message_name, message_content, username):
         return False
     return True
 
-def update_message(message_id, message_name, message_content):
+def update_message(message_id, message_name, message_content, modified_by_user_id):
     try:
         sql = text("""UPDATE messages
-                   SET name = :message_name, content = :message_content
+                   SET name = :message_name, content = :message_content, fk_modified_by_user_id = :modified_by, modification_time = NOW()
                    WHERE
                    id = :message_id""")
-        db.session.execute(sql, {"message_name" : message_name, "message_content" : message_content, "message_id" : message_id})
+        db.session.execute(sql, {"message_name" : message_name, "message_content" : message_content, "message_id" : message_id, "modified_by" : modified_by_user_id})
         db.session.commit()
     except Exception as error:
         print(error)

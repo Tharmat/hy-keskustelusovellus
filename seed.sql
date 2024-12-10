@@ -23,11 +23,10 @@ VALUES (
     (SELECT id FROM topics WHERE name = 'This is a test topic')
 );
 
-INSERT INTO messages (name, content, creation_time, fk_user_id, fk_threads_id)
+INSERT INTO messages (name, content, fk_created_by_user_id, fk_threads_id)
 VALUES (
     'Just a friendly reminder',
     'Have fun!',
-    CURRENT_TIMESTAMP,
     (SELECT id FROM users WHERE username = 'admin'),
     (SELECT id FROM topics WHERE name = 'This is a test topic')
 );
