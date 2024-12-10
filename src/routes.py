@@ -88,6 +88,21 @@ def topic(topic_id):
     user = src.db.get_user(session.get("username"))
     return render_template("topic.html", topic = src.db.fetch_topic_by_id(topic_id), is_admin = user.is_admin, threads = src.db.fetch_threads_by_topic_id(topic_id))
 
+@app.route("/topic/newtopic", methods = ["GET", "POST"])
+@login_required
+def new_topic():
+    user = src.db.get_user(session.get("username"))
+
+    if user.is_admin:
+        if request.method == "GET":
+            return render_template("newtopic.html")
+        if request.method == "POST":
+            if not request.form["topic_name"]:
+                return render_template("newtopic.html", error = {'message': "Keskustelualueen nimi ei voi olla tyhjä, anna keskustelualueen nimi"})
+            src.db.create_new_topic(request.form["topic_name"], user.id)
+            
+    return render_template("main.html", topics = src.db.fetch_current_topics(), is_admin = user.is_admin)
+
 @app.route("/topic/<int:topic_id>/delete", methods = ["POST"])
 @login_required
 def delete_topic(topic_id):

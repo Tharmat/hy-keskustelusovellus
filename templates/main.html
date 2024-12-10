@@ -17,5 +17,10 @@
     <br>
     {% endfor %}
 
+    {% if is_admin %}
+        <a href="/topic/newtopic">Luo uusi keskustelualue</a>
+    {% endif %}
+    
+
     {% include 'footer.html' %}
 </body>

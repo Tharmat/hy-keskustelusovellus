@@ -206,3 +206,13 @@ def delete_topic(topics_id, user_id):
         print(error)
         return False
     return True
+
+def create_new_topic(topic_name, user_id):
+    try:
+        sql = text("INSERT INTO topics (name, fk_user_id) VALUES (:topic_name, :user_id)") 
+        db.session.execute(sql, {"topic_name" : topic_name, "user_id" : user_id})
+        db.session.commit()
+    except Exception as error:
+        print(error)
+        return False
+    return True

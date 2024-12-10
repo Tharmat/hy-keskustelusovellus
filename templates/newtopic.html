@@ -1,0 +1,12 @@
+<body>
+    {% include 'error.html' %}
+
+    <form action="/topic/newtopic" method="post">
+        Uuden keskustelualueen nimi:
+        <input type="text" name="topic_name">
+        <input type="submit" value="Luo uusi alue">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+
+    {% include 'footer.html' %}
+</body>
