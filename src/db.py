@@ -69,7 +69,8 @@ def fetch_messages_by_threads_id(threads_id, username):
                                         FROM messages
                                         JOIN users users1 on users1.id = messages.fk_created_by_user_id
                                         LEFT JOIN users users2 on users2.id = messages.fk_modified_by_user_id
-                                        WHERE messages.fk_threads_id = :threads_id"""), 
+                                        WHERE messages.fk_threads_id = :threads_id
+                                        AND messages.removed = FALSE"""), 
                                         {"threads_id" : threads_id, "user_id" : user_id})
     return result.fetchall()
 
@@ -142,6 +143,20 @@ def update_message(message_id, message_name, message_content, modified_by_user_i
         print(error)
         return False
     return True
+
+def delete_message(message_id, modified_by_user_id):
+    try:
+        sql = text("""UPDATE messages
+                   SET removed = TRUE, fk_modified_by_user_id = :modified_by, modification_time = NOW()
+                   WHERE
+                   id = :message_id""")
+        db.session.execute(sql, {"message_id" : message_id, "modified_by" : modified_by_user_id})
+        db.session.commit()
+    except Exception as error:
+        print(error)
+        return False
+    return True
+
 
 # TODO: Probably should use user_id instead as it is more strictly enforced on db level than username
 def user_is_admin(username):

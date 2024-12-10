@@ -31,5 +31,6 @@ CREATE TABLE messages (
    creation_time TIMESTAMP DEFAULT NOW(),
    fk_created_by_user_id INTEGER REFERENCES users,
    modification_time TIMESTAMP DEFAULT NULL,
-   fk_modified_by_user_id INTEGER REFERENCES users DEFAULT NULL
+   fk_modified_by_user_id INTEGER REFERENCES users DEFAULT NULL,
+   removed BOOLEAN DEFAULT FALSE
 );

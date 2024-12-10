@@ -10,6 +10,10 @@
 
     {% if message.can_edit or is_admin %}
     <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id}}">Muokkaa viestiä</a>
+    <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id }}/delete" method="post">
+        <input type="submit" value="Poista viesti">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
     {% endif %}
     {% endfor %}
 

@@ -164,4 +164,16 @@ def message(topic_id, thread_id, message_id = None):
                 src.db.update_message(message_id, request.form["message_name"], request.form["message_content"], user.id)
 
         return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))
+
+@app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/<int:message_id>/delete", methods=["POST"])
+@login_required
+def delete_message(topic_id, thread_id, message_id):
+    check_csrf_token(request)
+
+    user = src.db.get_user(session.get("username"))
+    message = src.db.get_message(message_id)
+
+    if user.id == message.fk_created_by_user_id or user.is_admin:
+        src.db.delete_message(message_id, user.id)
     
+    return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))
