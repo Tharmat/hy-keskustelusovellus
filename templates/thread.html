@@ -8,7 +8,7 @@
     <p>Edited by: {{ message.modified_by }} at {{ message.modification_time }}</p>
     {% endif %}
 
-    {% if message.can_edit %}
+    {% if message.can_edit or is_admin %}
     <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id}}">Muokkaa viestiä</a>
     {% endif %}
     {% endfor %}

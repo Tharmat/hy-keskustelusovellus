@@ -89,7 +89,8 @@ def topic(topic_id):
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>")
 @login_required
 def thread(topic_id, thread_id):
-    return render_template("thread.html", topic_id = topic_id, thread_id = thread_id, messages = src.db.fetch_messages_by_threads_id(thread_id, session.get("username")))
+    user = src.db.get_user(session.get("username"))
+    return render_template("thread.html", topic_id = topic_id, thread_id = thread_id, is_admin = user.is_admin, messages = src.db.fetch_messages_by_threads_id(thread_id, session.get("username")))
 
 @app.route("/topic/<int:topic_id>/newthread", methods=["GET", "POST"])
 @login_required
@@ -163,3 +164,4 @@ def message(topic_id, thread_id, message_id = None):
                 src.db.update_message(message_id, request.form["message_name"], request.form["message_content"], user.id)
 
         return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))
+    
