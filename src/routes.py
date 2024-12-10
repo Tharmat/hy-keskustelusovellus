@@ -126,12 +126,14 @@ def message(topic_id, thread_id, message_id = None):
         if not message_id:
             return render_template("message.html", topic_id = topic_id, thread_id = thread_id, message = None)
         
-        # If User is the creator of the message OR is admin then show edit page
         user = src.db.get_user(session.get("username"))
         message = src.db.get_message(message_id)
 
-        if user.id == message.fk_created_by_user_id or user.is_admin:
-            return render_template("message.html", topic_id = topic_id, thread_id = thread_id, message = message)
+        # If message is not removed AND
+        # User is the creator of the message OR is admin then show edit page
+        if not message.removed:
+            if user.id == message.fk_created_by_user_id or user.is_admin:
+                return render_template("message.html", topic_id = topic_id, thread_id = thread_id, message = message)
         
         # Else redirect to threads.html
         return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))
