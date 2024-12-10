@@ -6,6 +6,13 @@
 <p><a href="/topic/{{ topic.id }}/thread/{{ thread.id }}">{{ thread.name }} </a>
 Started by: {{ thread.username }}
 </p>
+
+{% if is_admin %}
+<form action="/topic/{{ topic.id }}/thread/{{ thread.id }}/delete" method="post">
+    <input type="submit" value="Poista ketju">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>
+{% endif %}
 {% endfor %}
 
 <br>

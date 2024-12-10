@@ -127,6 +127,16 @@ def new_thread(topic_id):
 
         return redirect(url_for('topic', topic_id = topic_id))
 
+@app.route("/topic/<int:topic_id>/thread/<int:thread_id>/delete", methods = ["POST"])
+@login_required
+def delete_thread(topic_id, thread_id):
+    user = src.db.get_user(session.get("username"))
+    
+    if user.is_admin:
+        src.db.delete_thread(thread_id, user.id)
+    
+    return redirect(url_for('topic', topic_id = topic_id))
+
 # Slightly too smart way to use the same route for both creating a new message as well as editing an existing message
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/", methods=["GET", "POST"])
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/<int:message_id>", methods=["GET", "POST"])
