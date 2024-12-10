@@ -16,7 +16,7 @@ Pääpiirteittäin toimii kuten moni muukin "bulletin board" -softa, eli tarjoll
 - [x] Käyttäjä voi lisätä uuden ketjun haluamalleen keskustelualueelle antamalla ketjulle otsikon ja aloitusviestin
 - [x] Käyttäjä pystyy lisäämään viestin ketjuun
 - [x] Käyttäjä voi muokata omia viestejään
-- [ ] Käyttäjä voi poistaa omia viestejään
+- [x] Käyttäjä voi poistaa omia viestejään (oikeasti viestejä ei poisteta vaan niille merkitään täppä "removed" jolloin niitä ei enää näytetä)
 - [ ] Käyttäjä voi myös etsiä olemassaolevista viesteistä ne joissa on annettu hakusana
 - [ ] Ylläpitäjä voi muokata mitä tahansa keskustelualuetta, ketjua tai viestin
 - [ ] Ylläpitäjä voi poistaa minkä tahansa keskustelualueen, ketjun tai viestin
