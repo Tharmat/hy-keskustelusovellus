@@ -18,7 +18,7 @@ Pääpiirteittäin toimii kuten moni muukin "bulletin board" -softa, eli tarjoll
 - [x] Käyttäjä voi muokata omia viestejään
 - [ ] Käyttäjä voi poistaa omia viestejään
 - [ ] Käyttäjä voi myös etsiä olemassaolevista viesteistä ne joissa on annettu hakusana
-- [ ] Ylläpitäjä voi poistaa muokata mitä tahansa keskustelualuetta, ketjua tai viestin
+- [ ] Ylläpitäjä voi muokata mitä tahansa keskustelualuetta, ketjua tai viestin
 - [ ] Ylläpitäjä voi poistaa minkä tahansa keskustelualueen, ketjun tai viestin
 - [ ] Ylläpitäjä voi merkitä minkä tahansa keskustelualueen "salaiseksi" ja määrittää kenellä on sinne pääsy
 
