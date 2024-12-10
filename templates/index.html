@@ -1,23 +1,23 @@
 <title>Etusivu</title>
-<h1>Etusivu</h1>
-<p>Viesti sponsoreilta:
-{% for message in messages %}
-<b>
-{{ message.content }}
-</b>
-{% endfor %}
-</p>
+<body>
+    <h1>Etusivu</h1>
+    <p>Viesti sponsoreilta:
+    {% for message in messages %}
+        <b>{{ message.content }}</b>
+    {% endfor %}
+    </p>
 
-{% include 'error.html' %}
+    {% include 'error.html' %}
 
-<form action="/login" method="POST">
-    <p>Tunnus:<br>
-    <input type="text" name="username"></p>
-    <p>Salasana:<br>
-    <input type="password" name="password"></p>
-    <input type="submit" value="Kirjaudu">
-</form>
+    <form action="/login" method="POST">
+        <p>Tunnus:<br>
+        <input type="text" name="username"></p>
+        <p>Salasana:<br>
+        <input type="password" name="password"></p>
+        <input type="submit" value="Kirjaudu">
+    </form>
 
-<form action="/register" method="GET">
-    <input type="submit" value="Rekisteröidy">
-</form>
+    <form action="/register" method="GET">
+        <input type="submit" value="Rekisteröidy">
+    </form>
+</body>

@@ -1,24 +1,24 @@
 <body>
-<h2>{{ topic.name }}</h2>
-<p>Started by: {{ topic.username }}</p>
+    <h2>{{ topic.name }}</h2>
+    <p>Started by: {{ topic.username }}</p>
 
-{% for thread in threads %}
-<p><a href="/topic/{{ topic.id }}/thread/{{ thread.id }}">{{ thread.name }} </a>
-Started by: {{ thread.username }}
-</p>
+    {% for thread in threads %}
+        <p><a href="/topic/{{ topic.id }}/thread/{{ thread.id }}">{{ thread.name }} </a>
+        Started by: {{ thread.username }}
+        </p>
 
-{% if is_admin %}
-<form action="/topic/{{ topic.id }}/thread/{{ thread.id }}/delete" method="post">
-    <input type="submit" value="Poista ketju">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-</form>
-{% endif %}
-{% endfor %}
+        {% if is_admin %}
+            <form action="/topic/{{ topic.id }}/thread/{{ thread.id }}/delete" method="post">
+                <input type="submit" value="Poista ketju">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            </form>
+        {% endif %}
+    {% endfor %}
 
-<br>
-<a href="/topic/{{ topic.id }}/newthread">Lisää uusi ketju</a>
-</br>
-<br>
+    <br>
+    <a href="/topic/{{ topic.id }}/newthread">Lisää uusi ketju</a>
+    </br>
+    <br>
 
-{% include 'footer.html' %}
+    {% include 'footer.html' %}
 </body>

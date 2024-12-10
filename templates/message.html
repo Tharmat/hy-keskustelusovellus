@@ -1,9 +1,9 @@
 <body>
     {% include 'error.html' %}
     {% if message %}
-    <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id }}" method="POST">
+        <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id }}" method="POST">
     {% else %}
-    <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message" method="POST">
+        <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message" method="POST">
     {% endif %}
         Viestin otsikko:
         <input type="text" name="message_name" value="{{ message.name }}">

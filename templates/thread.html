@@ -1,20 +1,20 @@
 <body>
     {% for message in messages %}
-    <p><b> {{ message.name }} </b>
-    <p>{{ message.content }}</p>
-    <p>Created by: {{ message.username }} at {{ message.creation_time }}</p>
-    
-    {% if message.modified_by %}
-    <p>Edited by: {{ message.modified_by }} at {{ message.modification_time }}</p>
-    {% endif %}
+        <p><b> {{ message.name }} </b>
+        <p>{{ message.content }}</p>
+        <p>Created by: {{ message.username }} at {{ message.creation_time }}</p>
+        
+        {% if message.modified_by %}
+            <p>Edited by: {{ message.modified_by }} at {{ message.modification_time }}</p>
+        {% endif %}
 
-    {% if message.can_edit or is_admin %}
-    <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id}}">Muokkaa viestiä</a>
-    <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id }}/delete" method="post">
-        <input type="submit" value="Poista viesti">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
-    {% endif %}
+        {% if message.can_edit or is_admin %}
+            <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id}}">Muokkaa viestiä</a>
+            <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id }}/delete" method="post">
+                <input type="submit" value="Poista viesti">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            </form>
+        {% endif %}
     {% endfor %}
 
     <br>

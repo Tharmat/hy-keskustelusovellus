@@ -5,22 +5,21 @@
     <h2>Keskustelualueet</h2>
 
     {% for topic in topics %}
-    <b><a href="/topic/{{topic.id}}">{{ topic.name }} Messages: {{ topic.message_count }} Last activity: {{ topic.latest.strftime("%Y-%m-%d %H:%M:%S") }}</a></b>
+        <b><a href="/topic/{{topic.id}}">{{ topic.name }} Messages: {{ topic.message_count }} Last activity: {{ topic.latest.strftime("%Y-%m-%d %H:%M:%S") }}</a></b>
     
-    {% if is_admin %}
-    <form action="/topic/{{ topic.id }}/delete" method="post">
-        <input type="submit" value="Poista keskustelualue">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
-    {% endif %}
+        {% if is_admin %}
+            <form action="/topic/{{ topic.id }}/delete" method="post">
+                <input type="submit" value="Poista keskustelualue">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            </form>
+        {% endif %}
     
-    <br>
+        <br>
     {% endfor %}
 
     {% if is_admin %}
         <a href="/topic/newtopic">Luo uusi keskustelualue</a>
     {% endif %}
     
-
     {% include 'footer.html' %}
 </body>

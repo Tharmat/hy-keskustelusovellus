@@ -1,14 +1,16 @@
 <title>Rekisteröitymissivu</title>
-<h1>Rekisteröidy!</h1>
+<body>
+    <h1>Rekisteröidy!</h1>
 
-{% include 'error.html' %}
+    {% include 'error.html' %}
 
-<form action="/register" method="post">
-    Tunnus: <input type="text" name="username" value="{{username}}">
-    <p>
-    Salasana: <input type="password" name="password1">
-    <p>
-    Salasana uudestaan: <input type="password" name="password2">
-    <p>
-    <input type="submit" value="Luo tunnus">
-</form>
+    <form action="/register" method="post">
+        Tunnus: <input type="text" name="username" value="{{username}}">
+        <p>
+        Salasana: <input type="password" name="password1">
+        <p>
+        Salasana uudestaan: <input type="password" name="password2">
+        <p>
+        <input type="submit" value="Luo tunnus">
+    </form>
+</body>
