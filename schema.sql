@@ -13,14 +13,16 @@ CREATE TABLE announcements (
 CREATE TABLE topics (
    id SERIAL PRIMARY KEY,
    name TEXT UNIQUE,
-   fk_user_id INTEGER REFERENCES users
+   fk_user_id INTEGER REFERENCES users,
+   removed BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE threads (
    id SERIAL PRIMARY KEY,
    name TEXT,
    fk_user_id INTEGER REFERENCES users,
-   fk_topics_id INTEGER REFERENCES topics
+   fk_topics_id INTEGER REFERENCES topics,
+   removed BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE messages (

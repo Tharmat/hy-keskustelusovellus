@@ -24,6 +24,7 @@ def fetch_current_topics():
                                         JOIN users ON users.id = topics.fk_user_id
                                         LEFT JOIN threads ON threads.fk_topics_id = topics.id
                                         LEFT JOIN messages ON messages.fk_threads_id = threads.id
+                                        WHERE topics.removed = FALSE
                                         GROUP BY topics.name, topics.id
                                         ORDER BY latest DESC;"""))
     return result.fetchall()
@@ -35,7 +36,7 @@ def fetch_topic_by_id(id):
                                             users.username as username 
                                         FROM topics 
                                         JOIN users ON users.id = topics.fk_user_id 
-                                        WHERE topics.id= :id"""), 
+                                        WHERE topics.id= :id and topics.removed = FALSE"""),
                                      {"id" : id})
     return result.fetchone()
 
@@ -46,7 +47,7 @@ def fetch_threads_by_topic_id(id):
                                         users.username as username 
                                     FROM threads 
                                     JOIN users on users.id = threads.fk_user_id 
-                                    WHERE threads.fk_topics_id = :id"""), 
+                                    WHERE threads.fk_topics_id = :id and threads.removed = FALSE"""),
                                     {"id" : id})
     return result.fetchall()
 
@@ -168,3 +169,42 @@ def get_message(message_id):
     sql = text("SELECT * FROM messages where id = :message_id")
     result = db.session.execute(sql, {"message_id" : message_id})
     return result.fetchone()
+
+def delete_thread(thread_id):
+    try:
+        sql = text("""UPDATE threads
+                   SET removed = TRUE
+                   WHERE
+                   id = :thread_id""")
+        db.session.execute(sql, {"thread_id" : thread_id})
+        db.session.commit()
+    except Exception as error:
+        print(error)
+        return False
+    return True
+
+def delete_topic(topics_id, user_id):
+    try:
+        sql = text("""SELECT messages.id as id from messages
+                   JOIN threads on threads.id = messages.fk_threads_id
+                   JOIN topics on topics.id = threads.fk_topics_id
+                   where topics.id = :topics_id""")
+        message_ids = db.session.execute(sql, {"topics_id" : topics_id})
+        print("message_ids:", message_ids)
+
+        for message_id in message_ids:
+            delete_message(message_id.id, user_id)
+
+        for threads_id in fetch_threads_by_topic_id(topics_id):
+            delete_thread(threads_id.id)
+
+        sql = text("""UPDATE topics
+                    SET removed = TRUE
+                    WHERE
+                    id = :topics_id""")
+        db.session.execute(sql, {"topics_id" : topics_id})
+        db.session.commit()
+    except Exception as error:
+        print(error)
+        return False
+    return True

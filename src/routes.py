@@ -12,7 +12,8 @@ def index():
 @app.route("/main")
 @login_required
 def main():
-    return render_template("main.html", topics = src.db.fetch_current_topics())
+    user = src.db.get_user(session.get("username"))
+    return render_template("main.html", topics = src.db.fetch_current_topics(), is_admin = user.is_admin)
 
 @app.route("/login",methods=["GET", "POST"])
 def login():
@@ -84,7 +85,18 @@ def register():
 @app.route("/topic/<int:topic_id>")
 @login_required
 def topic(topic_id):
-    return render_template("topic.html", topic = src.db.fetch_topic_by_id(topic_id), threads = src.db.fetch_threads_by_topic_id(topic_id))
+    user = src.db.get_user(session.get("username"))
+    return render_template("topic.html", topic = src.db.fetch_topic_by_id(topic_id), is_admin = user.is_admin, threads = src.db.fetch_threads_by_topic_id(topic_id))
+
+@app.route("/topic/<int:topic_id>/delete", methods = ["POST"])
+@login_required
+def delete_topic(topic_id):
+    user = src.db.get_user(session.get("username"))
+    
+    if user.is_admin:
+        src.db.delete_topic(topic_id, user.id)
+    
+    return render_template("main.html", topics = src.db.fetch_current_topics(), is_admin = user.is_admin)
 
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>")
 @login_required
