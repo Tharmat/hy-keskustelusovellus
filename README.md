@@ -19,7 +19,7 @@ Pääpiirteittäin toimii kuten moni muukin "bulletin board" -softa, eli tarjoll
 - [x] Käyttäjä voi poistaa omia viestejään (oikeasti viestejä ei poisteta vaan niille merkitään täppä "removed" jolloin niitä ei enää näytetä)
 - [ ] Käyttäjä voi myös etsiä olemassaolevista viesteistä ne joissa on annettu hakusana
 - [ ] Ylläpitäjä voi muokata mitä tahansa keskustelualuetta, ketjua tai viestin
-- [ ] Ylläpitäjä voi poistaa minkä tahansa keskustelualueen, ketjun tai viestin
+- [x] Ylläpitäjä voi poistaa minkä tahansa keskustelualueen, ketjun tai viestin
 - [ ] Ylläpitäjä voi merkitä minkä tahansa keskustelualueen "salaiseksi" ja määrittää kenellä on sinne pääsy
 
 ## Käyttö
