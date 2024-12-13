@@ -114,7 +114,7 @@ def delete_topic(topic_id):
     if user.is_admin:
         src.db.delete_topic(topic_id, user.id)
     
-    return render_template("main.html", topics = src.db.fetch_current_topics(), is_admin = user.is_admin)
+    return redirect(url_for('main'))
 
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>")
 @login_required
