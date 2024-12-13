@@ -106,6 +106,22 @@ def new_topic():
     # If user is not admin, return main page
     return render_template("main.html", topics = src.db.fetch_current_topics(), is_admin = user.is_admin)
 
+@app.route("/topic/<int:topic_id>/edit", methods = ["GET", "POST"])
+@login_required
+def edit_topic(topic_id):
+    user = src.db.get_user(session.get("username"))
+    topic = src.db.fetch_topic_by_id(topic_id)
+
+    if user.is_admin:
+        if request.method == "GET":
+            return render_template("edittopic.html", topic = topic)
+        if request.method == "POST":
+            if not request.form["topic_name"]:
+                return render_template("edittopic.html", topic = topic, error = {'message': "Keskustelualueen nimi ei voi olla tyhjä, anna keskustelualueen nimi"})
+            if src.db.edit_topic(topic_id, request.form["topic_name"]):
+                return redirect(url_for('main'))
+            return render_template("edittopic.html", topic = topic, error = {'message': "Uuden keskustelualueen luominen epäonnistui, kokeile uudestaan."})
+
 @app.route("/topic/<int:topic_id>/delete", methods = ["POST"])
 @login_required
 def delete_topic(topic_id):

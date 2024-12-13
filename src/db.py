@@ -214,3 +214,13 @@ def create_new_topic(topic_name, user_id):
         print(error)
         return False
     return True
+
+def edit_topic(topic_id, topic_name):
+    try:
+        sql = text("UPDATE topics SET name = :topic_name WHERE id = :topic_id") 
+        db.session.execute(sql, {"topic_name" : topic_name, "topic_id" : topic_id})
+        db.session.commit()
+    except Exception as error:
+        print(error)
+        return False
+    return True

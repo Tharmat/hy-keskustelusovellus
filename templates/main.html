@@ -12,7 +12,12 @@
                 <input type="submit" value="Poista keskustelualue">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
-        {% endif %}
+            <form action="/topic/{{ topic.id }}/edit" method="get">
+                <input type="submit" value="Muokkaa keskustelualueen nimeä">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            </form>
+
+            {% endif %}
     
         <br>
     {% endfor %}
