@@ -8,7 +8,7 @@
         </p>
 
         {% if is_admin %}
-            <form action="/topic/{{ topic.id }}/thread/{{ thread.id }}/delete" method="post">
+            <form action="/topic/{{ topic.id }}/thread/{{ thread.id }}/delete" onsubmit="return confirm('Are you sure you want to delete the thread?');" method="post">
                 <input type="submit" value="Poista ketju">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
