@@ -189,8 +189,8 @@ def edit_thread(topic_id, thread_id):
             if not request.form["thread_name"]:
                 return render_template("thread_edit.html", topic_id = topic_id, thread_id = thread_id, thread = thread, error = {'message': "Viestiketjun nimi ei voi olla tyhjä, anna keskustelualueen nimi"})
             if src.db.edit_topic(topic_id, request.form["thread_name"]):
-                return redirect(url_for('main'))
-            return render_template("topic_edit.html", topic_id = topic_id, thread_id = thread_id, thread = thread, error = {'message': "Viestiketjun nimen muuttaminen epäonnistui, kokeile uudestaan."})
+                return redirect(url_for('topic', topic_id = topic_id))
+            return render_template("thread_edit.html", topic_id = topic_id, thread_id = thread_id, thread = thread, error = {'message': "Viestiketjun nimen muuttaminen epäonnistui, kokeile uudestaan."})
     return redirect(url_for('topic', topic_id = topic_id))
 
 # Slightly too smart way to use the same route for both creating a new message as well as editing an existing message
