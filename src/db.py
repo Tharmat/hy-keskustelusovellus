@@ -235,6 +235,9 @@ def edit_topic(topic_id, topic_name):
     return True
 
 def search_messages(search_string):
+    # Seems to be the only way to work with raw SQL like in SqlAlchemy. Seems hacky.
+    search_string = "%" + search_string + "%"
+
     sql = text("""SELECT 
                     messages.id as message_id, 
                     messages.name as message_name, 
