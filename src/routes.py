@@ -90,6 +90,7 @@ def topic(topic_id):
 
 @app.route("/topic/newtopic", methods = ["GET", "POST"])
 @login_required
+@check_csrf_token
 def new_topic():
     user = src.db.get_user(session.get("username"))
 
@@ -108,6 +109,7 @@ def new_topic():
 
 @app.route("/topic/<int:topic_id>/edit", methods = ["GET", "POST"])
 @login_required
+@check_csrf_token
 def edit_topic(topic_id):
     user = src.db.get_user(session.get("username"))
     topic = src.db.fetch_topic_by_id(topic_id)
@@ -124,6 +126,7 @@ def edit_topic(topic_id):
 
 @app.route("/topic/<int:topic_id>/delete", methods = ["POST"])
 @login_required
+@check_csrf_token
 def delete_topic(topic_id):
     user = src.db.get_user(session.get("username"))
     
@@ -140,12 +143,12 @@ def thread(topic_id, thread_id):
 
 @app.route("/topic/<int:topic_id>/newthread", methods=["GET", "POST"])
 @login_required
+@check_csrf_token
 def new_thread(topic_id):
     if request.method == "GET":
         return render_template("newthread.html", topic_id = topic_id)
     
     if request.method == "POST":
-        check_csrf_token(request)
 
         # Basic validations
         if not request.form["thread_name"]:
@@ -163,6 +166,7 @@ def new_thread(topic_id):
 
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/delete", methods = ["POST"])
 @login_required
+@check_csrf_token
 def delete_thread(topic_id, thread_id):
     user = src.db.get_user(session.get("username"))
     
@@ -173,6 +177,7 @@ def delete_thread(topic_id, thread_id):
 
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/edit", methods = ["GET", "POST"])
 @login_required
+@check_csrf_token
 def edit_thread(topic_id, thread_id):
     user = src.db.get_user(session.get("username"))
     thread = src.db.fetch_thread_by_thread_id(thread_id)
@@ -192,6 +197,7 @@ def edit_thread(topic_id, thread_id):
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/", methods=["GET", "POST"])
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/<int:message_id>", methods=["GET", "POST"])
 @login_required
+@check_csrf_token
 def message(topic_id, thread_id, message_id = None):
     if request.method == "GET":
         # Create new message
@@ -208,9 +214,8 @@ def message(topic_id, thread_id, message_id = None):
         return redirect(url_for('thread', topic_id = topic_id, thread_id = thread_id))
 
     if request.method == "POST":
-        check_csrf_token(request)
-
         message = None
+
         if message_id:
             message = src.db.get_message(message_id)
 
@@ -237,9 +242,8 @@ def message(topic_id, thread_id, message_id = None):
 
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/<int:message_id>/delete", methods=["POST"])
 @login_required
+@check_csrf_token
 def delete_message(topic_id, thread_id, message_id):
-    check_csrf_token(request)
-
     user = src.db.get_user(session.get("username"))
 
     if user_can_modify(message_id, user):
@@ -256,6 +260,7 @@ def user_can_modify(message_id, user):
         
 @app.route("/search", methods=["GET", "POST"])
 @login_required
+@check_csrf_token
 def search():
     if request.method == "POST":
          search_string = request.form["search_string"]
