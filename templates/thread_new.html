@@ -1,19 +1,20 @@
-<body>
-    {% include 'error.html' %}
+{% extends "layout.html" %}
+{% block title %} Uusi ketju {% endblock %}
 
-    <form action="/topic/{{ topic_id }}/newthread" method="post">
-        Uuden ketjun nimi: 
-        <input type="text" name="thread_name">
-        <br>
-        Viestin otsikko:
-        <input type="text" name="message_name">
-        <br>
-        Viesti:
-        <textarea name="message_content" rows="3" cols="40"></textarea>
-        <br>
-        <input type="submit" value="Lähetä">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
+{% block content %}
 
-    {% include 'footer.html' %}
-</body>
+<form action="/topic/{{ topic_id }}/newthread" method="post">
+    Uuden ketjun nimi: 
+    <input type="text" name="thread_name">
+    <br>
+    Viestin otsikko:
+    <input type="text" name="message_name">
+    <br>
+    Viesti:
+    <textarea name="message_content" rows="3" cols="40"></textarea>
+    <br>
+    <input type="submit" value="Lähetä">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>
+
+{% endblock %}

@@ -1,5 +1,9 @@
+{% extends "layout.html" %}
+{% block title %} Viesti {% endblock %}
+
+{% block content %}
+
 <body>
-    {% include 'error.html' %}
     {% if message %}
         <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id }}" method="POST">
     {% else %}
@@ -14,6 +18,6 @@
         <input type="submit" value="Lähetä">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
-
-    {% include 'footer.html' %}
 </body>
+
+{% endblock %}

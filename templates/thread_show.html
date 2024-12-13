@@ -1,25 +1,29 @@
-<body>
-    {% for message in messages %}
-        <p id="{{ message.id }}"><b> {{ message.name }} </b>
-        <p>{{ message.content }}</p>
-        <p>Created by: {{ message.username }} at {{ message.creation_time }}</p>
-        
-        {% if message.modified_by %}
-            <p>Edited by: {{ message.modified_by }} at {{ message.modification_time }}</p>
-        {% endif %}
+{% extends "layout.html" %}
+{% block title %} Viestit {% endblock %}
 
-        {% if message.can_edit or is_admin %}
-            <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id}}">Muokkaa viestiä</a>
-            <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id }}/delete" onsubmit="return confirm('Are you sure you want to delete the message?');" method="post">
-                <input type="submit" value="Poista viesti">
-                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-            </form>
-        {% endif %}
-    {% endfor %}
+{% block content %}
 
-    <br>
-    <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/message">Lisää uusi viesti</a>
-    <br>
-    <a href="/topic/{{ topic_id }}"> Takaisin viestiketjuun</a>
-    {% include 'footer.html' %}
-</body>
+{% for message in messages %}
+    <p id="{{ message.id }}"><b> {{ message.name }} </b>
+    <p>{{ message.content }}</p>
+    <p>Created by: {{ message.username }} at {{ message.creation_time }}</p>
+    
+    {% if message.modified_by %}
+        <p>Edited by: {{ message.modified_by }} at {{ message.modification_time }}</p>
+    {% endif %}
+
+    {% if message.can_edit or is_admin %}
+        <a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id}}">Muokkaa viestiä</a>
+        <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/message/{{ message.id }}/delete" onsubmit="return confirm('Are you sure you want to delete the message?');" method="post">
+            <input type="submit" value="Poista viesti">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        </form>
+    {% endif %}
+{% endfor %}
+
+<br>
+<a href="/topic/{{ topic_id }}/thread/{{ thread_id }}/message">Lisää uusi viesti</a>
+<br>
+<a href="/topic/{{ topic_id }}"> Takaisin viestiketjuun</a>
+
+{% endblock %}

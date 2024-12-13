@@ -1,20 +1,21 @@
-<title>Searchpage</title>
-<body>
-    <h1>Searchpage</h1>
+{% extends "layout.html" %}
+{% block title %} Searchpage {% endblock %}
 
-    {% include 'error.html' %}
+{% block content %}
 
-    <form action=/search method="post">
-        <p>Viesteistä etsittävä teksti</p>
-        <input type="text" name="search_string">
-        <input type="submit" value="Etsi">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
+<h1>Searchpage</h1>
 
-    {% for message in messages %}
-        <b>{{ message.message_name }}</b>
-        <p>{{ message.message_content }}</p>
-        <a href="/topic/{{ message.topic_id}}/thread/{{ message.thread_id }}#{{ message.message_id}}">Siirry ketjuun</a>
-    {% endfor %}
+<form action=/search method="post">
+    <p>Viesteistä etsittävä teksti</p>
+    <input type="text" name="search_string">
+    <input type="submit" value="Etsi">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>
 
-    {% include 'footer.html' %}
+{% for message in messages %}
+    <b>{{ message.message_name }}</b>
+    <p>{{ message.message_content }}</p>
+    <a href="/topic/{{ message.topic_id}}/thread/{{ message.thread_id }}#{{ message.message_id}}">Siirry ketjuun</a>
+{% endfor %}
+
+{% endblock %}

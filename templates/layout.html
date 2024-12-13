@@ -1,3 +1,13 @@
+<!doctype html>
+<title>Keskustelusovellus - {% block title %}{% endblock %}</title>
+<body>
+
+{% if error is defined %}
+<p>{{error.message }}</p>
+
+{% endif %}
+{% block content %}{% endblock %}
+
 {% if session.username %}
     <hr>
     <p>Olet kirjautunut nimellä {{ session.username }}</p>
@@ -10,3 +20,4 @@
         <input type="submit" value="Takaisin etusivulle">
     </form>
 {% endif %}
+</body>

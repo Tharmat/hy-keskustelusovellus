@@ -1,12 +1,13 @@
-<body>
-    {% include 'error.html' %}
+{% extends "layout.html" %}
+{% block title %} Searchpage {% endblock %}
 
-    <form action=/topic/{{topic.id}}/edit method="post">
-        Keskustelualueen nimi:
-        <input type="text" name="topic_name" value = "{{ topic.name }}">
-        <input type="submit" value="Muuta keskustelualueen nimeä">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
+{% block content %}
 
-    {% include 'footer.html' %}
-</body>
+<form action=/topic/{{topic.id}}/edit method="post">
+    Keskustelualueen nimi:
+    <input type="text" name="topic_name" value = "{{ topic.name }}">
+    <input type="submit" value="Muuta keskustelualueen nimeä">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</form>
+
+{% endblock %}

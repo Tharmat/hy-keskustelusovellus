@@ -1,28 +1,31 @@
-<body>
-    <h2>{{ topic.name }}</h2>
-    <p>Started by: {{ topic.username }}</p>
+{% extends "layout.html" %}
+{% block title %} Ketjut {% endblock %}
 
-    {% for thread in threads %}
-        <p><a href="/topic/{{ topic.id }}/thread/{{ thread.id }}">{{ thread.name }} </a>
-        Started by: {{ thread.username }}
-        </p>
+{% block content %}
 
-        {% if is_admin %}
-            <form action="/topic/{{ topic.id }}/thread/{{ thread.id }}/delete" onsubmit="return confirm('Are you sure you want to delete the thread?');" method="post">
-                <input type="submit" value="Poista ketju">
-                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-            </form>
-            <form action="/topic/{{ topic.id }}/thread/{{ thread.id }}/edit" method="get">
-                <input type="submit" value="Muokkaa ketjun nimeä">
-                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-            </form>
-        {% endif %}
-    {% endfor %}
+<h2>{{ topic.name }}</h2>
+<p>Started by: {{ topic.username }}</p>
 
-    <br>
-    <a href="/topic/{{ topic.id }}/newthread">Lisää uusi ketju</a>
-    </br>
-    <br>
+{% for thread in threads %}
+    <p><a href="/topic/{{ topic.id }}/thread/{{ thread.id }}">{{ thread.name }} </a>
+    Started by: {{ thread.username }}
+    </p>
 
-    {% include 'footer.html' %}
-</body>
+    {% if is_admin %}
+        <form action="/topic/{{ topic.id }}/thread/{{ thread.id }}/delete" onsubmit="return confirm('Are you sure you want to delete the thread?');" method="post">
+            <input type="submit" value="Poista ketju">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        </form>
+        <form action="/topic/{{ topic.id }}/thread/{{ thread.id }}/edit" method="get">
+            <input type="submit" value="Muokkaa ketjun nimeä">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        </form>
+    {% endif %}
+{% endfor %}
+
+<br>
+<a href="/topic/{{ topic.id }}/newthread">Lisää uusi ketju</a>
+</br>
+<br>
+
+{% endblock %}
