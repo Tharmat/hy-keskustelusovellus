@@ -171,6 +171,23 @@ def delete_thread(topic_id, thread_id):
     
     return redirect(url_for('topic', topic_id = topic_id))
 
+@app.route("/topic/<int:topic_id>/thread/<int:thread_id>/edit", methods = ["GET", "POST"])
+@login_required
+def edit_thread(topic_id, thread_id):
+    user = src.db.get_user(session.get("username"))
+    thread = src.db.fetch_thread_by_thread_id(thread_id)
+
+    if user.is_admin:
+        if request.method == "GET":
+            return render_template("editthread.html", topic_id = topic_id, thread_id = thread_id, thread = thread)
+        if request.method == "POST":
+            if not request.form["thread_name"]:
+                return render_template("editthread.html", topic_id = topic_id, thread_id = thread_id, thread = thread, error = {'message': "Viestiketjun nimi ei voi olla tyhjä, anna keskustelualueen nimi"})
+            if src.db.edit_topic(topic_id, request.form["thread_name"]):
+                return redirect(url_for('main'))
+            return render_template("edittopic.html", topic_id = topic_id, thread_id = thread_id, thread = thread, error = {'message': "Viestiketjun nimen muuttaminen epäonnistui, kokeile uudestaan."})
+    return redirect(url_for('topic', topic_id = topic_id))
+
 # Slightly too smart way to use the same route for both creating a new message as well as editing an existing message
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/", methods=["GET", "POST"])
 @app.route("/topic/<int:topic_id>/thread/<int:thread_id>/message/<int:message_id>", methods=["GET", "POST"])

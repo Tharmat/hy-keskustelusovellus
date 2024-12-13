@@ -51,6 +51,15 @@ def fetch_threads_by_topic_id(id):
                                     {"id" : id})
     return result.fetchall()
 
+def fetch_thread_by_thread_id(thread_id):
+    result = db.session.execute(text("""SELECT
+                                        threads.id as id, 
+                                        threads.name as name 
+                                    FROM threads 
+                                    WHERE threads.id = :thread_id and threads.removed = FALSE"""),
+                                    {"thread_id" : thread_id})
+    return result.fetchone()
+    
 def fetch_messages_by_threads_id(threads_id, username):
     user_id = get_user_id(username)
 

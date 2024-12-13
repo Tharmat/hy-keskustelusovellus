@@ -1,0 +1,12 @@
+<body>
+    {% include 'error.html' %}
+
+    <form action="/topic/{{ topic_id }}/thread/{{ thread_id }}/edit" method="post">
+        Ketjun nimi: 
+        <input type="text" name="thread_name" value = "{{ thread.name }}">
+        <input type="submit" value="Lähetä">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+
+    {% include 'footer.html' %}
+</body>
