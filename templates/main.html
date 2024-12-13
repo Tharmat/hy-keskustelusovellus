@@ -17,10 +17,12 @@
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             </form>
 
-            {% endif %}
+        {% endif %}
     
         <br>
     {% endfor %}
+
+    <p>Keskustelu hukassa? <a href="/search">Etsi viesteistä</a></p>
 
     {% if is_admin %}
         <a href="/topic/newtopic">Luo uusi keskustelualue</a>

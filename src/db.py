@@ -233,3 +233,25 @@ def edit_topic(topic_id, topic_name):
         print(error)
         return False
     return True
+
+def search_messages(search_string):
+    sql = text("""SELECT 
+                    messages.id as message_id, 
+                    messages.name as message_name, 
+                    messages.content as message_content,
+                    topics.id as topic_id,
+                    topics.name as topic_name,
+                    threads.id as thread_id,
+                    threads.name as thread_name
+                FROM messages
+                JOIN threads on threads.id = messages.fk_threads_id
+                JOIN topics on topics.id = threads.fk_topics_id
+                WHERE 
+                    messages.content like :search_string
+                    AND messages.removed = FALSE
+                    AND threads.removed = FALSE
+                    AND topics.removed = FALSE
+                LIMIT 10
+               """)
+    result = db.session.execute(sql, {"search_string" : search_string})
+    return result.fetchall()

@@ -1,6 +1,6 @@
 <body>
     {% for message in messages %}
-        <p><b> {{ message.name }} </b>
+        <p id="{{ message.id }}"><b> {{ message.name }} </b>
         <p>{{ message.content }}</p>
         <p>Created by: {{ message.username }} at {{ message.creation_time }}</p>
         

@@ -1,0 +1,20 @@
+<title>Searchpage</title>
+<body>
+    <h1>Searchpage</h1>
+
+    {% include 'error.html' %}
+
+    <form action=/search method="post">
+        <p>Viesteistä etsittävä teksti</p>
+        <input type="text" name="search_string">
+        <input type="submit" value="Etsi">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+
+    {% for message in messages %}
+        <b>{{ message.message_name }}</b>
+        <p>{{ message.message_content }}</p>
+        <a href="/topic/{{ message.topic_id}}/thread/{{ message.thread_id }}#{{ message.message_id}}">Siirry ketjuun</a>
+    {% endfor %}
+
+    {% include 'footer.html' %}

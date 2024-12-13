@@ -253,3 +253,18 @@ def user_can_modify(message_id, user):
     if not message.removed:
         if user.id == message.fk_created_by_user_id or user.is_admin:
             return True
+        
+@app.route("/search", methods=["GET", "POST"])
+@login_required
+def search():
+    if request.method == "POST":
+         search_string = request.form["search_string"]
+
+         if search_string:
+            messages = src.db.search_messages(search_string)
+            if not messages:
+                return render_template("search.html", error = {'message': "Annetulla tekstillä ei löytynyt yhtään viestiä"})
+            return render_template("search.html", messages = messages)
+         
+    return render_template("search.html")
+    
