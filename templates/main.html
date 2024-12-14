@@ -2,14 +2,13 @@
 {% block title %} Pääsivu {% endblock %}
 
 {% block content %}
-
 <h1>Tämä on pääsivu</h1>
 <br>
 <h2>Keskustelualueet</h2>
 
 {% for topic in topics %}
     <b><a href="/topic/{{topic.id}}">{{ topic.name }} Messages: {{ topic.message_count }} Last activity: {{ topic.latest.strftime("%Y-%m-%d %H:%M:%S") }}</a></b>
-
+    <br>
     {% if is_admin %}
         <form action="/topic/{{ topic.id }}/delete" onsubmit="return confirm('Are you sure you want to delete the topic?');" method="post">
             <input type="submit" value="Poista keskustelualue">
@@ -22,13 +21,18 @@
 
     {% endif %}
 
-    <br>
 {% endfor %}
+<br>
 
-<p>Keskustelu hukassa? <a href="/search">Etsi viesteistä</a></p>
-
-{% if is_admin %}
-    <a href="/topic/newtopic">Luo uusi keskustelualue</a>
-{% endif %}
+<div class="row">
+    <div class="column">
+        Keskustelu hukassa? <a href="/search">Etsi viesteistä</a>
+    </div>
+    <div class="column">
+        {% if is_admin %}
+            <a href="/topic/newtopic">Luo uusi keskustelualue</a>
+        {% endif %}
+    </div>
+</div>
 
 {% endblock %}

@@ -1,5 +1,10 @@
 <!doctype html>
-<title>Keskustelusovellus - {% block title %}{% endblock %}</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Keskustelusovellus - {% block title %}{% endblock %}</title>
+</head>
+
 <body>
 
 {% if error is defined %}
@@ -9,15 +14,23 @@
 {% block content %}{% endblock %}
 
 {% if session.username %}
-    <hr>
-    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+<hr>
+<div class="row">
+    <div class ="column">
+    Olet kirjautunut nimellä {{ session.username }}
+    </div>
 
-    <form action="/logout" method="GET">
-        <input type="submit" value="Kirjaudu ulos">
-    </form>
+    <div class ="column">
+        <form action="/logout" method="GET">
+            <input type="submit" value="Kirjaudu ulos">
+        </form>
+    </div>
 
-    <form action="/main" method="GET">
-        <input type="submit" value="Takaisin etusivulle">
-    </form>
+    <div class ="column">
+        <form action="/main" method="GET">
+            <input type="submit" value="Takaisin etusivulle">
+        </form>
+    </div>
+</div>
 {% endif %}
 </body>
