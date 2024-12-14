@@ -13,7 +13,14 @@ def index():
 @login_required
 def main():
     user = src.db.get_user(session.get("username"))
-    return render_template("main.html", topics = src.db.fetch_current_topics(), is_admin = user.is_admin)
+    
+    topics = None
+    if user.is_admin:
+        topics = src.db.fetch_current_topics_for_admin()
+    else:
+        topics = src.db.fetch_current_topics_for_non_admin_user(user.id)
+    
+    return render_template("main.html", topics = topics, is_admin = user.is_admin)
 
 @app.route("/login",methods=["GET", "POST"])
 def login():
@@ -93,19 +100,25 @@ def topic(topic_id):
 @check_csrf_token
 def new_topic():
     user = src.db.get_user(session.get("username"))
-
+   
     if user.is_admin:
         if request.method == "GET":
             return render_template("topic_new.html")
         if request.method == "POST":
-            if not request.form["topic_name"]:
+            topic_name = request.form.get("topic_name")
+            if not topic_name:
                 return render_template("topic_new.html", error = {'message': "Keskustelualueen nimi ei voi olla tyhjä, anna keskustelualueen nimi"})
-            if src.db.create_new_topic(request.form["topic_name"], user.id):
-                return render_template("main.html", topics = src.db.fetch_current_topics(), is_admin = user.is_admin)
+            
+            is_hidden = False
+            if request.form.get("is_hidden") == "on":
+                is_hidden = True
+            
+            if src.db.create_new_topic(topic_name, user.id, is_hidden):
+                return render_template("main.html", topics = src.db.fetch_current_topics_for_admin(), is_admin = user.is_admin)
             return render_template("topic_new.html", error = {'message': "Uuden keskustelualueen luominen epäonnistui, kokeile uudestaan."})
     
     # If user is not admin, return main page
-    return render_template("main.html", topics = src.db.fetch_current_topics(), is_admin = user.is_admin)
+    return render_template("main.html", topics = src.db.fetch_current_topics_for_non_admin_user(user.id), is_admin = user.is_admin)
 
 @app.route("/topic/<int:topic_id>/edit", methods = ["GET", "POST"])
 @login_required
@@ -116,13 +129,15 @@ def edit_topic(topic_id):
 
     if user.is_admin:
         if request.method == "GET":
-            return render_template("topic_edit.html", topic = topic)
+            users = src.db.fetch_user_right_for_topic(topic.id)
+            return render_template("topic_edit.html", topic = topic, users = users)
         if request.method == "POST":
             if not request.form["topic_name"]:
-                return render_template("topic_edit.html", topic = topic, error = {'message': "Keskustelualueen nimi ei voi olla tyhjä, anna keskustelualueen nimi"})
-            if src.db.edit_topic(topic_id, request.form["topic_name"]):
+                return render_template("topic_edit.html", topic = topic, users = users, error = {'message': "Keskustelualueen nimi ei voi olla tyhjä, anna keskustelualueen nimi"})
+            if src.db.edit_topic(topic_id, request.form.get("topic_name"), request.form.get("is_hidden")):
+                print(request.form)
                 return redirect(url_for('main'))
-            return render_template("topic_edit.html", topic = topic, error = {'message': "Uuden keskustelualueen luominen epäonnistui, kokeile uudestaan."})
+            return render_template("topic_edit.html", topic = topic, users = users, error = {'message': "Uuden keskustelualueen luominen epäonnistui, kokeile uudestaan."})
 
 @app.route("/topic/<int:topic_id>/delete", methods = ["POST"])
 @login_required
@@ -188,7 +203,7 @@ def edit_thread(topic_id, thread_id):
         if request.method == "POST":
             if not request.form["thread_name"]:
                 return render_template("thread_edit.html", topic_id = topic_id, thread_id = thread_id, thread = thread, error = {'message': "Viestiketjun nimi ei voi olla tyhjä, anna keskustelualueen nimi"})
-            if src.db.edit_topic(topic_id, request.form["thread_name"]):
+            if src.db.edit_topic_name(topic_id, request.form["thread_name"]):
                 return redirect(url_for('topic', topic_id = topic_id))
             return render_template("thread_edit.html", topic_id = topic_id, thread_id = thread_id, thread = thread, error = {'message': "Viestiketjun nimen muuttaminen epäonnistui, kokeile uudestaan."})
     return redirect(url_for('topic', topic_id = topic_id))

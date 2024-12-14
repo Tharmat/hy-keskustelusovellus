@@ -1,13 +1,32 @@
 {% extends "layout.html" %}
-{% block title %} Searchpage {% endblock %}
+{% block title %} Muokkaa keskustelualuetta {% endblock %}
 
 {% block content %}
 
+<table>
 <form action=/topic/{{topic.id}}/edit method="post">
     Keskustelualueen nimi:
     <input type="text" name="topic_name" value = "{{ topic.name }}">
-    <input type="submit" value="Muuta keskustelualueen nimeä">
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-</form>
+    <br/>
+    <input type="checkbox" name="is_hidden" {{ "checked" if topic.is_hidden }}>
+        <label for="is_hidden">Keskustelualue on salainen</label>
+    <tr></tr>
+        <td>User id</td>
+        <td>Username</td>
+        <td>Has rights</td>
+{% for user in users %}
+    <tr>
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td><input type="checkbox" name="has_rights" {{ "checked" if user.has_rights }}></td>
+    </tr>
+{% endfor %}
 
+<br/>
+<tr>
+<td><input type="submit" value="Päivitä keskustelualueen tiedot"></td>
+<input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+</tr>
+</form>
+</table>
 {% endblock %}

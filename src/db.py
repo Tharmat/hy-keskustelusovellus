@@ -13,27 +13,65 @@ def fetch_motd():
                                         FROM announcements"""))
     return result.fetchall()
 
-def fetch_current_topics():
-    result = db.session.execute(text("""SELECT 
-                                            topics.name as name, 
-                                            topics.id as id, 
-                                            count(messages.id) as message_count, 
-                                            COALESCE(max(messages.creation_time), 
-                                            CURRENT_TIMESTAMP) as latest
-                                        FROM topics
-                                        JOIN users ON users.id = topics.fk_user_id
-                                        LEFT JOIN threads ON threads.fk_topics_id = topics.id
-                                        LEFT JOIN messages ON messages.fk_threads_id = threads.id
-                                        WHERE topics.removed = FALSE
-                                        GROUP BY topics.name, topics.id
-                                        ORDER BY latest DESC;"""))
+def fetch_user_right_for_topic(topic_id):
+    sql = """SELECT 
+            users.id as id, 
+            users.username as name,
+            CASE
+                WHEN user_rights.fk_user_id = users.id THEN TRUE
+                ELSE FALSE
+                END AS has_rights
+        FROM users
+        LEFT JOIN user_rights ON user_rights.fk_user_id = users.id and user_rights.fk_topics_id = :topic_id
+        WHERE 
+            users.is_admin = FALSE"""
+    result = db.session.execute(text(sql), {"topic_id" : topic_id})
     return result.fetchall()
+
+def fetch_current_topics_for_non_admin_user(user_id):
+    sql = """SELECT 
+                topics.name as name, 
+                topics.id as id, 
+                COUNT(messages.id) as message_count, 
+                COALESCE(MAX(messages.creation_time), CURRENT_TIMESTAMP) as latest
+            FROM topics
+            LEFT JOIN threads ON threads.fk_topics_id = topics.id
+            LEFT JOIN messages ON messages.fk_threads_id = threads.id
+            LEFT JOIN user_rights ON user_rights.fk_topics_id = topics.id
+            WHERE 
+                topics.removed != TRUE
+                AND CASE
+                    WHEN topics.is_hidden = FALSE THEN TRUE
+                    ELSE user_rights.fk_user_id = :user_id
+                    END
+            GROUP BY topics.name, topics.id
+            ORDER BY latest DESC"""
+    result = db.session.execute(text(sql), {"user_id": user_id})
+    return result.fetchall()
+
+def fetch_current_topics_for_admin():
+    sql = """SELECT 
+                topics.name as name, 
+                topics.id as id, 
+                COUNT(messages.id) as message_count, 
+                COALESCE(MAX(messages.creation_time), CURRENT_TIMESTAMP) as latest
+            FROM topics
+            LEFT JOIN threads ON threads.fk_topics_id = topics.id
+            LEFT JOIN messages ON messages.fk_threads_id = threads.id
+            LEFT JOIN user_rights ON user_rights.fk_topics_id = topics.id
+            WHERE 
+                topics.removed != TRUE    
+            GROUP BY topics.name, topics.id
+            ORDER BY latest DESC"""
+    result = db.session.execute(text(sql))
+    return result.fetchall()    
 
 def fetch_topic_by_id(id):
     result = db.session.execute(text("""SELECT 
                                             topics.name as name, 
-                                            topics.id as id, 
-                                            users.username as username 
+                                            topics.id as id,
+                                            topics.is_hidden as is_hidden,
+                                            users.username as username
                                         FROM topics 
                                         JOIN users ON users.id = topics.fk_user_id 
                                         WHERE topics.id= :id and topics.removed = FALSE"""),
@@ -214,17 +252,17 @@ def delete_topic(topics_id, user_id):
         return False
     return True
 
-def create_new_topic(topic_name, user_id):
+def create_new_topic(topic_name, user_id, is_hidden):
     try:
-        sql = text("INSERT INTO topics (name, fk_user_id) VALUES (:topic_name, :user_id)") 
-        db.session.execute(sql, {"topic_name" : topic_name, "user_id" : user_id})
+        sql = text("INSERT INTO topics (name, fk_user_id, is_hidden) VALUES (:topic_name, :user_id, :is_hidden)")
+        db.session.execute(sql, {"topic_name" : topic_name, "user_id" : user_id, "is_hidden" : is_hidden})
         db.session.commit()
     except Exception as error:
         print(error)
         return False
     return True
 
-def edit_topic(topic_id, topic_name):
+def edit_topic_name(topic_id, topic_name):
     try:
         sql = text("UPDATE topics SET name = :topic_name WHERE id = :topic_id") 
         db.session.execute(sql, {"topic_name" : topic_name, "topic_id" : topic_id})
@@ -233,6 +271,17 @@ def edit_topic(topic_id, topic_name):
         print(error)
         return False
     return True
+
+def edit_topic(topic_id, topic_name, is_hidden):
+    try:
+        sql = text("UPDATE topics SET name = :topic_name, is_hidden = :is_hidden WHERE id = :topic_id") 
+        db.session.execute(sql, {"topic_name" : topic_name, "topic_id" : topic_id, "is_hidden" : is_hidden})
+    except Exception as error:
+        print(error)
+        return False
+    return True
+
+        
 
 def search_messages(search_string):
     # Seems to be the only way to work with raw SQL like in SqlAlchemy. Seems hacky.
