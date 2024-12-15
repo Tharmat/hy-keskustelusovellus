@@ -134,8 +134,12 @@ def edit_topic(topic_id):
         if request.method == "POST":
             if not request.form["topic_name"]:
                 return render_template("topic_edit.html", topic = topic, users = users, error = {'message': "Keskustelualueen nimi ei voi olla tyhjä, anna keskustelualueen nimi"})
-            if src.db.edit_topic(topic_id, request.form.get("topic_name"), request.form.get("is_hidden")):
-                print(request.form)
+            is_hidden = request.form.get("is_hidden", False)
+
+            if is_hidden:
+                is_hidden = True
+
+            if src.db.edit_topic(topic_id, request.form.get("topic_name"), is_hidden):
                 return redirect(url_for('main'))
             return render_template("topic_edit.html", topic = topic, users = users, error = {'message': "Uuden keskustelualueen luominen epäonnistui, kokeile uudestaan."})
 

@@ -276,6 +276,7 @@ def edit_topic(topic_id, topic_name, is_hidden):
     try:
         sql = text("UPDATE topics SET name = :topic_name, is_hidden = :is_hidden WHERE id = :topic_id") 
         db.session.execute(sql, {"topic_name" : topic_name, "topic_id" : topic_id, "is_hidden" : is_hidden})
+        db.session.commit()
     except Exception as error:
         print(error)
         return False
