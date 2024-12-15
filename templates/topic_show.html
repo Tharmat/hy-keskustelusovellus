@@ -7,11 +7,15 @@
 <p>Started by: {{ topic.username }}</p>
 
 {% for thread in threads %}
-    <p><a href="/topic/{{ topic.id }}/thread/{{ thread.id }}">{{ thread.name }} </a>
+    <div class="row">
+    <div class="column">
+    <a href="/topic/{{ topic.id }}/thread/{{ thread.id }}">{{ thread.name }} </a>
+    </div>
+    <div>
     Started by: {{ thread.username }}
-    </p>
-
+    </div>
     {% if is_admin %}
+        <div class="column">
         <form action="/topic/{{ topic.id }}/thread/{{ thread.id }}/delete" onsubmit="return confirm('Are you sure you want to delete the thread?');" method="post">
             <input type="submit" value="Poista ketju">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
@@ -20,7 +24,9 @@
             <input type="submit" value="Muokkaa ketjun nimeä">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
+        </div>
     {% endif %}
+    </div>
 {% endfor %}
 
 <br>

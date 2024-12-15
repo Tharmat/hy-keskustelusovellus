@@ -2,14 +2,17 @@
 {% block title %} Pääsivu {% endblock %}
 
 {% block content %}
-<h1>Tämä on pääsivu</h1>
+<h1>Keskustelusovellus 2000</h1>
 <br>
 <h2>Keskustelualueet</h2>
-
 {% for topic in topics %}
+    <div class="row">
+    <div class="column">
     <b><a href="/topic/{{topic.id}}">{{ topic.name }} Messages: {{ topic.message_count }} Last activity: {{ topic.latest.strftime("%Y-%m-%d %H:%M:%S") }}</a></b>
     <br>
+    </div>
     {% if is_admin %}
+        <div class="column">
         <form action="/topic/{{ topic.id }}/delete" onsubmit="return confirm('Are you sure you want to delete the topic?');" method="post">
             <input type="submit" value="Poista keskustelualue">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
@@ -18,9 +21,9 @@
             <input type="submit" value="Muokkaa keskustelualuetta">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         </form>
-
+        </div>
     {% endif %}
-
+</div>
 {% endfor %}
 <br>
 
